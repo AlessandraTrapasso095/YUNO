@@ -14,7 +14,7 @@ export function Logo({ compact = false, className = "", href = "/" }: LogoProps)
   const { t } = useI18n();
   return (
     <Link className={`brand-logo ${compact ? "brand-logo--compact" : ""} ${className}`} href={href} aria-label={t("common.home")}>
-      <Image src={compact ? "/favicon.png" : "/logo.png"} alt="YUNO" width={compact ? 1254 : 2166} height={compact ? 1254 : 726} priority />
+      <Image src={compact ? "/img/favicon.png" : "/img/logo.png"} alt="YUNO" width={compact ? 1254 : 2166} height={compact ? 1254 : 726} priority />
     </Link>
   );
 }

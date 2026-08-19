@@ -17,9 +17,9 @@ export const metadata: Metadata = {
   },
   description: "A social skill-sharing platform powered by people, curiosity, and Skill Hours.",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/img/favicon.png",
+    shortcut: "/img/favicon.png",
+    apple: "/img/favicon.png",
   },
   openGraph: {
     type: "website",
