@@ -125,7 +125,7 @@ export function LanguageSwitcher({ variant = "compact" }: LanguageSwitcherProps)
                 >
                   <span aria-hidden="true">{option.flag}</span>
                   <span>{t(option.labelKey)}</span>
-                  {selected && <Check size={15} aria-label={t("language.active")} />}
+                  {selected && <Check size={15} aria-hidden="true" />}
                 </button>
               );
             })}

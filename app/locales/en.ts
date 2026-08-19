@@ -6,11 +6,23 @@ export const en = {
     italian: "Italiano",
     active: "Current language",
   },
+  metadata: {
+    home: {
+      title: "YUNO — Teach what you know. Learn what you want.",
+      description: "Meet people through skills. Teach what you know, earn Skill Hours, and learn anything from the YUNO community.",
+    },
+    discover: {
+      title: "Discover people & skills — YUNO",
+      description: "Meet YUNO members who teach the skills you want to learn.",
+    },
+  },
   common: {
+    home: "YUNO home",
     skillHours: "Skill Hours",
     taglineFirst: "Teach what you know.",
     taglineSecond: "Learn what you want.",
     brandQuestion: "What do YUNO?",
+    brandQuestionLead: "What do ",
     brandMatch: "It's a YUNO match!",
     close: "Close",
   },

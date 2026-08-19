@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { DiscoverApp } from "../components/DiscoverApp";
+import { translate } from "../i18n/config";
+import { getRequestLocale } from "../i18n/server";
 
-export const metadata: Metadata = {
-  title: "Discover people & skills — YUNO",
-  description: "Meet YUNO members who teach the skills you want to learn.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return {
+    title: { absolute: translate(locale, "metadata.discover.title") },
+    description: translate(locale, "metadata.discover.description"),
+  };
+}
 
 export default function DiscoverPage() {
   return <DiscoverApp />;

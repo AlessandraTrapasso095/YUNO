@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
-import { cookies, headers } from "next/headers";
 import { I18nProvider } from "./i18n/I18nProvider";
-import { browserLocaleFromHeader, isLocale, localeCookieName } from "./i18n/config";
+import { getRequestLocale } from "./i18n/server";
 import "./globals.css";
 
 const geist = Geist({
@@ -42,11 +41,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
-  const persistedLocale = cookieStore.get(localeCookieName)?.value;
-  const initialLocale = isLocale(persistedLocale)
-    ? persistedLocale
-    : browserLocaleFromHeader(headerStore.get("accept-language"));
+  const initialLocale = await getRequestLocale();
 
   return (
     <html lang={initialLocale}>

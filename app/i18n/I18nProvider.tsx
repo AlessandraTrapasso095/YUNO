@@ -6,6 +6,7 @@ import {
   isLocale,
   localeCookieName,
   localeStorageKey,
+  routeMetadata,
   translate,
   type Locale,
 } from "./config";
@@ -50,6 +51,8 @@ export function I18nProvider({ children, initialLocale }: { children: React.Reac
 
   useEffect(() => {
     document.documentElement.lang = locale;
+    const metadata = routeMetadata.find((entry) => entry.matches(window.location.pathname));
+    if (metadata) document.title = translate(locale, metadata.titleKey);
     return () => {
       if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
     };

@@ -12,11 +12,23 @@ export const it: DictionaryShape<TranslationDictionary> = {
     italian: "Italiano",
     active: "Lingua attiva",
   },
+  metadata: {
+    home: {
+      title: "YUNO — Insegna ciò che sai. Impara ciò che vuoi.",
+      description: "Incontra persone attraverso le competenze. Insegna ciò che sai, guadagna Skill Hours e impara dalla community YUNO.",
+    },
+    discover: {
+      title: "Scopri persone e competenze — YUNO",
+      description: "Incontra membri YUNO che insegnano le competenze che vuoi imparare.",
+    },
+  },
   common: {
+    home: "Home YUNO",
     skillHours: "Skill Hours",
     taglineFirst: "Insegna ciò che sai.",
     taglineSecond: "Impara ciò che vuoi.",
     brandQuestion: "What do YUNO?",
+    brandQuestionLead: "What do ",
     brandMatch: "It's a YUNO match!",
     close: "Chiudi",
   },

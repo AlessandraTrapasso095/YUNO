@@ -6,6 +6,10 @@ export type Locale = (typeof supportedLocales)[number];
 export const defaultLocale: Locale = "en";
 export const localeCookieName = "yuno_locale";
 export const localeStorageKey = "yuno.locale";
+export const routeMetadata = [
+  { matches: (pathname: string) => pathname.startsWith("/discover"), titleKey: "metadata.discover.title" },
+  { matches: (pathname: string) => pathname === "/", titleKey: "metadata.home.title" },
+] as const;
 
 type StringDictionary = Record<string, string | StringDictionary>;
 

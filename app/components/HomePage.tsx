@@ -99,9 +99,11 @@ function HeroVisual() {
         <Image src={profiles[1].image} alt="Marco" fill sizes="216px" />
         <span>{t("skills.photography")}</span>
       </motion.div>
-      <motion.div className="hero-profile-shell" animate={reduceMotion ? undefined : { y: [0, -8, 0] }} transition={{ duration: 5.8, repeat: Infinity, ease: "easeInOut" }}>
-        <ProfileCard profile={profiles[0]} mode="hero" />
-      </motion.div>
+      <div className="hero-profile-shell">
+        <motion.div className="hero-profile-float" animate={reduceMotion ? undefined : { y: [0, -8, 0] }} transition={{ duration: 5.8, repeat: Infinity, ease: "easeInOut" }}>
+          <ProfileCard profile={profiles[0]} mode="hero" />
+        </motion.div>
+      </div>
       <motion.div className="hero-match-note" initial={{ opacity: 0, scale: 0.7, y: 8 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 0.9, type: "spring" }}>
         <span><Sparkles size={16} fill="currentColor" /></span>
         <div><strong>{t("homepage.hero.greatMatch")}</strong><small>{t("homepage.hero.matchReason")}</small></div>
@@ -173,7 +175,7 @@ export function HomePage() {
       <section className="what-section section-shell" id="community">
         <Reveal className="what-section__copy">
           <SectionEyebrow>{t("homepage.what.eyebrow")}</SectionEyebrow>
-          <h2>{t("common.brandQuestion").replace("YUNO?", "")}<span className="gradient-text">YUNO?</span></h2>
+          <h2>{t("common.brandQuestionLead")}<span className="gradient-text">YUNO?</span></h2>
           <p>{t("homepage.what.copy")}</p>
           <div className="what-section__microcopy"><span><Check size={14} /> {t("homepage.what.noCourses")}</span><span><Check size={14} /> {t("homepage.what.realPeople")}</span><span><Check size={14} /> {t("homepage.what.yourPace")}</span></div>
         </Reveal>

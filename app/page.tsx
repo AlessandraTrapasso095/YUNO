@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { HomePage } from "./components/HomePage";
+import { translate } from "./i18n/config";
+import { getRequestLocale } from "./i18n/server";
 
-export const metadata: Metadata = {
-  title: "YUNO — Teach what you know. Learn what you want.",
-  description: "Meet people through skills. Teach what you know, earn Skill Hours, and learn anything from the YUNO community.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return {
+    title: { absolute: translate(locale, "metadata.home.title") },
+    description: translate(locale, "metadata.home.description"),
+  };
+}
 
 export default function Home() {
   return <HomePage />;
