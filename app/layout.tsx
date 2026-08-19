@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
+import { cookies, headers } from "next/headers";
+import { I18nProvider } from "./i18n/I18nProvider";
+import { browserLocaleFromHeader, isLocale, localeCookieName } from "./i18n/config";
 import "./globals.css";
 
 const geist = Geist({
@@ -38,10 +41,18 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
+  const persistedLocale = cookieStore.get(localeCookieName)?.value;
+  const initialLocale = isLocale(persistedLocale)
+    ? persistedLocale
+    : browserLocaleFromHeader(headerStore.get("accept-language"));
+
   return (
-    <html lang="en">
-      <body className={`${geist.variable}`}>{children}</body>
+    <html lang={initialLocale}>
+      <body className={`${geist.variable}`}>
+        <I18nProvider initialLocale={initialLocale}>{children}</I18nProvider>
+      </body>
     </html>
   );
 }

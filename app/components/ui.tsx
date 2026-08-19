@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { ArrowUpRight, Clock3 } from "lucide-react";
+import { useI18n } from "../i18n/I18nProvider";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
@@ -55,13 +56,14 @@ export function SkillHourBadge({ balance = "4.5", compact = false }: { balance?:
 }
 
 export function AvatarStack() {
+  const { t } = useI18n();
   const people = ["/people/anna.jpg", "/people/luca.jpg", "/people/sofia.jpg"];
   return (
     <div className="avatar-proof">
       <div className="avatar-stack" aria-hidden="true">
         {people.map((person) => <Image key={person} src={person} alt="" width={72} height={72} />)}
       </div>
-      <p><strong>8,000+</strong> curious people already sharing</p>
+      <p><strong>8,000+</strong> {t("homepage.hero.socialProof")}</p>
     </div>
   );
 }

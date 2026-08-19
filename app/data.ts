@@ -1,83 +1,93 @@
 export type YunoProfile = {
   id: number;
+  key: "giulia" | "marco" | "sofia" | "luca";
   name: string;
   age: number;
-  city: string;
-  country: string;
   match: number;
   image: string;
-  bio: string;
-  teaches: string[];
-  learns: string[];
-  availability: string;
+  teaches: SkillId[];
+  learns: SkillId[];
 };
+
+export type SkillId =
+  | "coding"
+  | "photography"
+  | "guitar"
+  | "spanish"
+  | "cooking"
+  | "excel"
+  | "yoga"
+  | "marketing"
+  | "piano"
+  | "design"
+  | "videoEditing"
+  | "italian"
+  | "graphicDesign"
+  | "lightroom"
+  | "portraits"
+  | "portuguese"
+  | "uxWriting"
+  | "brandDesign"
+  | "figma"
+  | "react"
+  | "typeScript"
+  | "webDesign"
+  | "german"
+  | "english";
 
 export const profiles: YunoProfile[] = [
   {
     id: 1,
+    key: "giulia",
     name: "Giulia",
     age: 24,
-    city: "Milan",
-    country: "Italy",
     match: 96,
     image: "/people/giulia.jpg",
-    bio: "Visual storyteller, weekend pasta maker, and incurably curious human.",
-    teaches: ["Italian", "Photography", "Cooking"],
-    learns: ["Graphic Design", "Spanish", "Piano"],
-    availability: "Usually free after 18:00",
+    teaches: ["italian", "photography", "cooking"],
+    learns: ["graphicDesign", "spanish", "piano"],
   },
   {
     id: 2,
+    key: "marco",
     name: "Marco",
     age: 29,
-    city: "Lisbon",
-    country: "Portugal",
     match: 91,
     image: "/people/marco.jpg",
-    bio: "Product photographer who believes the best lessons start with good coffee.",
-    teaches: ["Photography", "Lightroom", "Portraits"],
-    learns: ["Portuguese", "Guitar", "UX Writing"],
-    availability: "Weekends & Tuesday evenings",
+    teaches: ["photography", "lightroom", "portraits"],
+    learns: ["portuguese", "guitar", "uxWriting"],
   },
   {
     id: 3,
+    key: "sofia",
     name: "Sofia",
     age: 26,
-    city: "Barcelona",
-    country: "Spain",
     match: 89,
     image: "/people/sofia.jpg",
-    bio: "Brand designer, analog music collector, and patient Spanish conversation partner.",
-    teaches: ["Spanish", "Brand Design", "Figma"],
-    learns: ["Italian", "Video Editing", "Yoga"],
-    availability: "Available this Thursday",
+    teaches: ["spanish", "brandDesign", "figma"],
+    learns: ["italian", "videoEditing", "yoga"],
   },
   {
     id: 4,
+    key: "luca",
     name: "Luca",
     age: 31,
-    city: "Berlin",
-    country: "Germany",
     match: 86,
     image: "/people/luca.jpg",
-    bio: "Frontend developer, sourdough beginner, and very amateur jazz pianist.",
-    teaches: ["React", "TypeScript", "Web Design"],
-    learns: ["German", "Piano", "Cooking"],
-    availability: "Free Friday afternoons",
+    teaches: ["react", "typeScript", "webDesign"],
+    learns: ["german", "piano", "cooking"],
   },
 ];
 
-export const floatingSkills = [
-  "Coding",
-  "Photography",
-  "Guitar",
-  "Spanish",
-  "Cooking",
-  "Excel",
-  "Yoga",
-  "Marketing",
-  "Piano",
-  "Design",
-  "Video Editing",
+export const floatingSkills: SkillId[] = [
+  "coding",
+  "photography",
+  "guitar",
+  "spanish",
+  "cooking",
+  "excel",
+  "yoga",
+  "marketing",
+  "piano",
+  "design",
+  "videoEditing",
 ];
-
