@@ -8,7 +8,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://yuno.example"),
+  metadataBase: new URL("https://yuno-skill-sharing.ale-dav.chatgpt.site"),
   title: {
     default: "YUNO — Teach what you know. Learn what you want.",
     template: "%s | YUNO",
