@@ -11,7 +11,9 @@ export const routeMetadata = [
   { matches: (pathname: string) => pathname === "/", titleKey: "metadata.home.title" },
 ] as const;
 
-type StringDictionary = Record<string, string | StringDictionary>;
+interface StringDictionary {
+  [key: string]: string | StringDictionary;
+}
 
 export const dictionaries: Record<Locale, StringDictionary> = {
   en: en as unknown as StringDictionary,

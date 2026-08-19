@@ -24,7 +24,7 @@ export function I18nProvider({ children, initialLocale }: { children: React.Reac
   const [locale, setLocaleState] = useState(initialLocale);
   const [isChanging, setIsChanging] = useState(false);
   const reduceMotion = useReducedMotion();
-  const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const transitionTimer = useRef<number | null>(null);
 
   const persistLocale = useCallback((nextLocale: Locale) => {
     document.documentElement.lang = nextLocale;

@@ -130,7 +130,7 @@ function SkillCloud() {
         </motion.button>
       ))}
       <div className="skill-cloud__center">
-        <Image src="/favicon.png" alt="" width={84} height={84} />
+        <Image src="/img/favicon.png" alt="" width={84} height={84} />
       </div>
     </div>
   );
@@ -260,7 +260,7 @@ export function HomePage() {
 
       <section className="final-cta section-shell">
         <Reveal className="final-cta__panel">
-          <div className="final-cta__mark"><Image src="/favicon.png" alt="" width={1254} height={1254} /></div>
+          <div className="final-cta__mark"><Image src="/img/favicon.png" alt="" width={1254} height={1254} /></div>
           <div>
             <span>{t("common.brandQuestion")}</span>
             <h2>{t("homepage.finalCta.title")}</h2>

@@ -23,7 +23,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000` for the homepage or `http://localhost:3000/discover` for the product experience.
+Open `http://localhost:3001` for the homepage or `http://localhost:3001/discover` for the product experience.
 
 ## Quality checks
 
