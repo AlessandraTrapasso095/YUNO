@@ -29,6 +29,7 @@ export function Logo({
         width={compact ? 1254 : 5994}
         height={compact ? 1254 : 2563}
         priority
+        unoptimized
       />
     </Link>
   );
