@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useI18n } from "../i18n/I18nProvider";
 
 type LogoProps = {
@@ -10,11 +10,26 @@ type LogoProps = {
   href?: string;
 };
 
-export function Logo({ compact = false, className = "", href = "/" }: LogoProps) {
+export function Logo({
+  compact = false,
+  className = "",
+  href = "/",
+}: LogoProps) {
   const { t } = useI18n();
+
   return (
-    <Link className={`brand-logo ${compact ? "brand-logo--compact" : ""} ${className}`} href={href} aria-label={t("common.home")}>
-      <Image src={compact ? "/img/favicon.png" : "/img/logo.png"} alt="YUNO" width={compact ? 1254 : 2166} height={compact ? 1254 : 726} priority />
+    <Link
+      className={`brand-logo ${compact ? "brand-logo--compact" : ""} ${className}`}
+      href={href}
+      aria-label={t("common.home")}
+    >
+      <Image
+        src={compact ? "/img/favicon.png" : "/img/logo.png"}
+        alt="YUNO"
+        width={compact ? 1254 : 5994}
+        height={compact ? 1254 : 2563}
+        priority
+      />
     </Link>
   );
 }

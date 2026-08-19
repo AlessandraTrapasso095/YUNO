@@ -52,6 +52,46 @@ export const it: DictionaryShape<TranslationDictionary> = {
     help: "Aiuto e supporto",
     viewProfile: "Vedi profilo",
   },
+  footer: {
+    explore: "Esplora",
+    about: "Chi siamo",
+    contact: "Contattaci",
+    legal: "Policy e condizioni",
+    privacy: "Privacy Policy",
+    cookies: "Cookie Policy",
+    terms: "Termini e condizioni",
+    rights: "Tutti i diritti riservati.",
+  },
+  infoPages: {
+    backHome: "Torna a YUNO",
+    legalEyebrow: "Legale",
+    notice: "Documento informativo in preparazione. Il testo definitivo sarà pubblicato prima dell’apertura del servizio al pubblico.",
+    about: {
+      eyebrow: "YUNO",
+      title: "Chi siamo",
+      paragraph1: "YUNO nasce da un’idea semplice: tutti sanno qualcosa che vale la pena condividere.",
+      paragraph2: "Mettiamo in contatto persone che vogliono insegnare ciò che conoscono e imparare qualcosa di nuovo, trasformando il tempo e le competenze in nuove connessioni.",
+      paragraph3: "Non corsi impersonali, ma persone reali, curiosità e conoscenza condivisa.",
+    },
+    contact: {
+      eyebrow: "YUNO",
+      title: "Contattaci",
+      paragraph1: "Hai una domanda, un suggerimento o vuoi parlare con il team YUNO?",
+      paragraph2: "I canali ufficiali di assistenza e contatto saranno disponibili qui prima del lancio pubblico della piattaforma.",
+    },
+    privacy: {
+      title: "Privacy Policy",
+      paragraph1: "Questa pagina ospiterà l’informativa completa relativa al trattamento dei dati personali degli utenti YUNO.",
+    },
+    cookies: {
+      title: "Cookie Policy",
+      paragraph1: "Questa pagina descriverà cookie e tecnologie analoghe utilizzate da YUNO, le relative finalità e le possibilità di gestione del consenso.",
+    },
+    terms: {
+      title: "Termini e condizioni",
+      paragraph1: "Questa pagina ospiterà i termini che regolano l’accesso e l’utilizzo dei servizi YUNO.",
+    },
+  },
   homepage: {
     hero: {
       eyebrow: "Un nuovo modo di crescere, insieme",
@@ -94,7 +134,7 @@ export const it: DictionaryShape<TranslationDictionary> = {
       annaLearns: "Anna impara fotografia",
       fromMarco: "da Marco · la prossima settimana",
       booked: "Prenotata",
-      noDirectMatch: "Luca e Marco non devono mai fare match.",
+      noDirectMatch: "Non serve uno scambio diretto: insegni a una persona e impari da un’altra.",
     },
     discovery: {
       eyebrow: "Scopri persone, non annunci",

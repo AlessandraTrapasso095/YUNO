@@ -1,0 +1,5 @@
+.skill-hour-badge { display: inline-flex; padding: 7px 10px 7px 7px; align-items: center; gap: 5px; border: 1px solid #ded8ff; border-radius: var(--radius-pill); color: #634dcc; background: var(--soft-violet); font-size: 10px; }
+.skill-hour-badge__icon { display: grid; width: 25px; height: 25px; border-radius: 50%; color: var(--white); background: linear-gradient(135deg,var(--blue),var(--violet)); place-items: center; }
+.skill-hour-badge strong { color: var(--navy); font-size: 12px; }
+.skill-hour-badge--compact { padding: 4px 8px 4px 4px; }
+.skill-hour-badge--compact .skill-hour-badge__icon { width: 23px; height: 23px; }

@@ -9,8 +9,10 @@ const geist = Geist({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://yuno-skill-sharing.ale-dav.chatgpt.site"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "YUNO — Teach what you know. Learn what you want.",
     template: "%s | YUNO",

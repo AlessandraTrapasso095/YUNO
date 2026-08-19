@@ -175,7 +175,10 @@ export function HomePage() {
       <section className="what-section section-shell" id="community">
         <Reveal className="what-section__copy">
           <SectionEyebrow>{t("homepage.what.eyebrow")}</SectionEyebrow>
-          <h2>{t("common.brandQuestionLead")}<span className="gradient-text">YUNO?</span></h2>
+          <h2 className="what-section__title">
+            <span>{t("common.brandQuestionLead")}</span>
+            <span className="gradient-text what-section__title-brand">YUNO?</span>
+          </h2>
           <p>{t("homepage.what.copy")}</p>
           <div className="what-section__microcopy"><span><Check size={14} /> {t("homepage.what.noCourses")}</span><span><Check size={14} /> {t("homepage.what.realPeople")}</span><span><Check size={14} /> {t("homepage.what.yourPace")}</span></div>
         </Reveal>
@@ -272,10 +275,34 @@ export function HomePage() {
       </section>
 
       <footer className="site-footer section-shell">
-        <Logo />
-        <p>{t("common.taglineFirst")} {t("common.taglineSecond")}</p>
-        <div><a href="#how-it-works">{t("navigation.howItWorks")}</a><a href="#skill-hours">{t("navigation.skillHours")}</a><a href="/discover">{t("navigation.discover")}</a></div>
-        <span>© 2026 YUNO</span>
+        <div className="site-footer__brand">
+          <Logo />
+          <p>{t("common.taglineFirst")} {t("common.taglineSecond")}</p>
+        </div>
+
+        <div className="site-footer__column">
+          <strong>{t("footer.explore")}</strong>
+          <a href="#how-it-works">{t("navigation.howItWorks")}</a>
+          <a href="#skill-hours">{t("navigation.skillHours")}</a>
+          <a href="/discover">{t("navigation.discover")}</a>
+        </div>
+
+        <div className="site-footer__column">
+          <strong>YUNO</strong>
+          <a href="/chi-siamo">{t("footer.about")}</a>
+          <a href="/contattaci">{t("footer.contact")}</a>
+        </div>
+
+        <div className="site-footer__column">
+          <strong>{t("footer.legal")}</strong>
+          <a href="/privacy">{t("footer.privacy")}</a>
+          <a href="/cookie-policy">{t("footer.cookies")}</a>
+          <a href="/termini">{t("footer.terms")}</a>
+        </div>
+
+        <div className="site-footer__bottom">
+          <span>© 2026 YUNO. {t("footer.rights")}</span>
+        </div>
       </footer>
     </main>
   );

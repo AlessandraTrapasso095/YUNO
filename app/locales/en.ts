@@ -46,6 +46,46 @@ export const en = {
     help: "Help & support",
     viewProfile: "View profile",
   },
+  footer: {
+    explore: "Explore",
+    about: "About us",
+    contact: "Contact us",
+    legal: "Policies & terms",
+    privacy: "Privacy Policy",
+    cookies: "Cookie Policy",
+    terms: "Terms & conditions",
+    rights: "All rights reserved.",
+  },
+  infoPages: {
+    backHome: "Back to YUNO",
+    legalEyebrow: "Legal",
+    notice: "This document is being prepared. The final version will be published before the service opens to the public.",
+    about: {
+      eyebrow: "YUNO",
+      title: "About us",
+      paragraph1: "YUNO starts with a simple idea: everyone knows something worth sharing.",
+      paragraph2: "We connect people who want to teach what they know and learn something new, turning time and skills into new connections.",
+      paragraph3: "Not impersonal courses, but real people, curiosity, and shared knowledge.",
+    },
+    contact: {
+      eyebrow: "YUNO",
+      title: "Contact us",
+      paragraph1: "Have a question, a suggestion, or want to talk to the YUNO team?",
+      paragraph2: "Official support and contact channels will be available here before the platform launches publicly.",
+    },
+    privacy: {
+      title: "Privacy Policy",
+      paragraph1: "This page will contain the complete information about how YUNO processes users’ personal data.",
+    },
+    cookies: {
+      title: "Cookie Policy",
+      paragraph1: "This page will describe the cookies and similar technologies used by YUNO, their purposes, and the available consent controls.",
+    },
+    terms: {
+      title: "Terms & conditions",
+      paragraph1: "This page will contain the terms governing access to and use of YUNO services.",
+    },
+  },
   homepage: {
     hero: {
       eyebrow: "A new way to grow, together",
@@ -88,7 +128,7 @@ export const en = {
       annaLearns: "Anna learns Photography",
       fromMarco: "from Marco · next week",
       booked: "Booked",
-      noDirectMatch: "Luca and Marco never need to match.",
+      noDirectMatch: "No direct swap needed: teach one person and learn from another.",
     },
     discovery: {
       eyebrow: "Discover people, not listings",

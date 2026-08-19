@@ -1,0 +1,226 @@
+.hero {
+  display: grid;
+  min-height: 780px;
+  padding-top: 118px;
+  padding-bottom: 82px;
+  grid-template-columns: minmax(0, .93fr) minmax(480px, 1.07fr);
+  align-items: center;
+  gap: 64px;
+}
+
+.hero__copy {
+  position: relative;
+  z-index: 3;
+}
+
+.hero h1 {
+  max-width: 690px;
+  margin: 21px 0 22px;
+  color: var(--navy);
+  font-size: clamp(52px, 5.1vw, 76px);
+  font-weight: 800;
+  letter-spacing: -.058em;
+  line-height: .97;
+}
+
+.hero h1 span {
+  color: transparent;
+  background: var(--gradient-horizontal);
+  background-size: 190% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: gradient-drift 8s ease-in-out infinite;
+}
+
+.hero__support {
+  max-width: 570px;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 17px;
+  line-height: 1.62;
+}
+
+.hero__actions {
+  display: flex;
+  margin-top: 30px;
+  gap: 12px;
+}
+
+.hero__actions .button {
+  min-height: 55px;
+  padding-inline: 25px;
+}
+
+.avatar-proof {
+  display: flex;
+  margin-top: 30px;
+  align-items: center;
+  gap: 13px;
+}
+
+.avatar-stack {
+  display: flex;
+  padding-left: 8px;
+}
+
+.avatar-stack img {
+  width: 36px;
+  height: 36px;
+  margin-left: -8px;
+  border: 3px solid var(--off-white);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-proof p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.avatar-proof strong {
+  color: var(--navy);
+}
+
+.hero-visual {
+  position: relative;
+  min-height: 585px;
+  isolation: isolate;
+}
+
+.hero-visual::before {
+  position: absolute;
+  z-index: -2;
+  top: 7%;
+  right: -2%;
+  width: 105%;
+  height: 85%;
+  border-radius: 48% 52% 42% 58% / 54% 42% 58% 46%;
+  background: radial-gradient(circle at 25% 28%, rgba(22, 139, 255, .12), transparent 35%), radial-gradient(circle at 78% 62%, rgba(240, 68, 183, .12), transparent 38%), #f5f3ff;
+  content: "";
+  transform: rotate(-3deg);
+}
+
+.hero-ambient {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+.hero-ambient--one {
+  top: 56px;
+  right: 12px;
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 112, 77, .2);
+}
+
+.hero-ambient--two {
+  bottom: 66px;
+  left: -6px;
+  width: 110px;
+  height: 110px;
+  background: rgba(22, 139, 255, .13);
+}
+
+.hero-profile-shell {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: 50%;
+  width: 348px;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 32px 36px rgba(27, 34, 74, .18));
+}
+
+.hero-profile-float { width: 100%; }
+
+.hero-card-back {
+  position: absolute;
+  z-index: 1;
+  width: 216px;
+  height: 300px;
+  overflow: hidden;
+  border: 8px solid rgba(255,255,255,.88);
+  border-radius: 30px;
+  box-shadow: var(--shadow-md);
+}
+
+.hero-card-back img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-card-back::after {
+  position: absolute;
+  inset: 45% 0 0;
+  background: linear-gradient(transparent, rgba(17,25,54,.78));
+  content: "";
+}
+
+.hero-card-back span {
+  position: absolute;
+  z-index: 2;
+  bottom: 16px;
+  left: 15px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  color: var(--white);
+  background: rgba(255,255,255,.16);
+  font-size: 11px;
+  font-weight: 720;
+  backdrop-filter: blur(12px);
+}
+
+.hero-card-back--left {
+  top: 134px;
+  left: 4px;
+}
+
+.hero-card-back--right {
+  right: -7px;
+  bottom: 108px;
+}
+
+.hero-match-note {
+  position: absolute;
+  z-index: 8;
+  right: -10px;
+  top: 96px;
+  display: flex;
+  padding: 13px 17px 13px 12px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 17px;
+  background: rgba(255,255,255,.91);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(14px);
+}
+
+.hero-match-note > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  color: var(--white);
+  background: var(--gradient);
+  place-items: center;
+}
+
+.hero-match-note div {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-match-note strong {
+  font-size: 12px;
+}
+
+.hero-match-note small {
+  margin-top: 2px;
+  color: var(--color-text-secondary);
+  font-size: 10px;
+}

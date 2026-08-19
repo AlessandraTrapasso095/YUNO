@@ -6,7 +6,6 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   Bell,
   CalendarDays,
-  Check,
   Clock3,
   Compass,
   Heart,
@@ -26,7 +25,7 @@ import { useI18n } from "../i18n/I18nProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Logo } from "./Logo";
 import { ProfileCard } from "./ProfileCard";
-import { Button, SkillHourBadge, SkillTag } from "./ui";
+import { Button, Input, Modal, SkillHourBadge, SkillTag, Toast, Tooltip } from "./ui";
 
 const navItems = [
   { id: "discover", labelKey: "navigation.discover", icon: Compass },
@@ -59,8 +58,11 @@ function MatchCelebration({ name, image, onClose }: { name: string; image: strin
   const reduceMotion = useReducedMotion();
   const { t } = useI18n();
   return (
-    <motion.div className="match-overlay" role="dialog" aria-modal="true" aria-label={t("discover.match.dialogLabel", { name })} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-      <motion.div className="match-modal" initial={reduceMotion ? false : { opacity: 0, scale: 0.82, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.94 }} transition={{ type: "spring", stiffness: 220, damping: 20 }}>
+    <Modal
+      ariaLabel={t("discover.match.dialogLabel", { name })}
+      className="match-modal"
+      reduceMotion={Boolean(reduceMotion)}
+    >
         <button className="match-modal__close" type="button" onClick={onClose} aria-label={t("common.close")}><X /></button>
         {!reduceMotion && Array.from({ length: 10 }).map((_, index) => (
           <motion.span
@@ -82,8 +84,7 @@ function MatchCelebration({ name, image, onClose }: { name: string; image: strin
         <p>{t("discover.match.copy")}</p>
         <Button onClick={onClose}>{t("discover.match.message")}</Button>
         <button className="match-modal__keep" type="button" onClick={onClose}>{t("discover.match.keepDiscovering")}</button>
-      </motion.div>
-    </motion.div>
+    </Modal>
   );
 }
 
@@ -172,16 +173,36 @@ export function DiscoverApp() {
           </div>
           <div className="desktop-alerts">
             <LanguageSwitcher />
-            <button type="button" aria-label={t("navigation.notifications")}><Bell size={21} /><span /></button>
+            <Tooltip content={t("navigation.notifications")}>
+              <button type="button" aria-label={t("navigation.notifications")}>
+                <Bell size={21} />
+                <span />
+              </button>
+            </Tooltip>
           </div>
         </div>
 
         <div className="discover-search-row">
-          <label className="discover-search">
-            <Search size={20} aria-hidden="true" />
-            <input value={query} onChange={(event) => { setQuery(event.target.value); setProfileIndex(0); }} placeholder={t("discover.search.placeholder")} aria-label={t("discover.search.label")} />
-            {query && <button type="button" onClick={() => setQuery("")} aria-label={t("discover.search.clear")}><X size={17} /></button>}
-          </label>
+          <Input
+            controlClassName="discover-search"
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setProfileIndex(0);
+            }}
+            placeholder={t("discover.search.placeholder")}
+            aria-label={t("discover.search.label")}
+            leadingIcon={<Search size={20} />}
+            trailingAction={query ? (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label={t("discover.search.clear")}
+              >
+                <X size={17} />
+              </button>
+            ) : undefined}
+          />
           <button className="filter-button" type="button"><SlidersHorizontal size={19} /><span>{t("discover.search.filters")}</span><em>2</em></button>
         </div>
 
@@ -265,7 +286,11 @@ export function DiscoverApp() {
       </nav>
 
       <AnimatePresence>{matchOpen && <MatchCelebration name={currentProfile.name} image={currentProfile.image} onClose={() => { setMatchOpen(false); moveNext({ key: "discover.notices.connected", parameters: { name: currentProfile.name } }); }} />}</AnimatePresence>
-      <AnimatePresence>{notice && <motion.div className="app-toast" initial={{ opacity: 0, y: 16, x: "-50%" }} animate={{ opacity: 1, y: 0, x: "-50%" }} exit={{ opacity: 0, y: 10, x: "-50%" }}><Check size={16} /> {t(notice.key, notice.parameters)}</motion.div>}</AnimatePresence>
+      <AnimatePresence>
+        {notice && (
+          <Toast>{t(notice.key, notice.parameters)}</Toast>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

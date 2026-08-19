@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
-import { ArrowUpRight, Clock3 } from "lucide-react";
+import { motion } from "motion/react";
+import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
+import { ArrowUpRight, Check, Clock3 } from "lucide-react";
 import { useI18n } from "../i18n/I18nProvider";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -52,6 +53,186 @@ export function SkillHourBadge({ balance = "4.5", compact = false }: { balance?:
       <strong>{balance}</strong>
       <span>SH</span>
     </div>
+  );
+}
+
+
+type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+  label?: string;
+  hideLabel?: boolean;
+  leadingIcon?: ReactNode;
+  trailingAction?: ReactNode;
+  controlClassName?: string;
+};
+
+export function Input({
+  label,
+  hideLabel = false,
+  leadingIcon,
+  trailingAction,
+  controlClassName = "",
+  className = "",
+  id,
+  ...props
+}: InputProps) {
+  const inputId = id ?? props.name;
+
+  return (
+    <label className={`ui-field ${className}`}>
+      {label && (
+        <span className={hideLabel ? "sr-only" : "ui-field__label"}>
+          {label}
+        </span>
+      )}
+
+      <span className={`ui-input ${controlClassName}`}>
+        {leadingIcon && (
+          <span className="ui-input__leading" aria-hidden="true">
+            {leadingIcon}
+          </span>
+        )}
+
+        <input id={inputId} {...props} />
+
+        {trailingAction && (
+          <span className="ui-input__trailing">
+            {trailingAction}
+          </span>
+        )}
+      </span>
+    </label>
+  );
+}
+
+type TooltipProps = {
+  children: ReactNode;
+  content: ReactNode;
+  className?: string;
+};
+
+export function Tooltip({
+  children,
+  content,
+  className = "",
+}: TooltipProps) {
+  return (
+    <span className={`ui-tooltip ${className}`}>
+      {children}
+      <span className="ui-tooltip__content" role="tooltip">
+        {content}
+      </span>
+    </span>
+  );
+}
+
+type ModalProps = {
+  children: ReactNode;
+  ariaLabel: string;
+  className?: string;
+  overlayClassName?: string;
+  reduceMotion?: boolean;
+};
+
+export function Modal({
+  children,
+  ariaLabel,
+  className = "",
+  overlayClassName = "",
+  reduceMotion = false,
+}: ModalProps) {
+  return (
+    <motion.div
+      className={`ui-modal-overlay ${overlayClassName}`}
+      role="dialog"
+      aria-modal="true"
+      aria-label={ariaLabel}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        className={`ui-modal ${className}`}
+        initial={reduceMotion ? false : { opacity: 0, scale: 0.82, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.94 }}
+        transition={{ type: "spring", stiffness: 220, damping: 20 }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+type ToastProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+export function Toast({ children, className = "" }: ToastProps) {
+  return (
+    <motion.div
+      className={`app-toast ${className}`}
+      initial={{ opacity: 0, y: 16, x: "-50%" }}
+      animate={{ opacity: 1, y: 0, x: "-50%" }}
+      exit={{ opacity: 0, y: 10, x: "-50%" }}
+      role="status"
+      aria-live="polite"
+    >
+      <Check size={16} aria-hidden="true" />
+      {children}
+    </motion.div>
+  );
+}
+
+type AvatarProps = {
+  src: string;
+  alt: string;
+  size?: "sm" | "md" | "lg";
+  online?: boolean;
+  className?: string;
+};
+
+export function Avatar({
+  src,
+  alt,
+  size = "md",
+  online = false,
+  className = "",
+}: AvatarProps) {
+  const pixels = size === "sm" ? 32 : size === "lg" ? 64 : 44;
+
+  return (
+    <span className={`ui-avatar ui-avatar--${size} ${className}`}>
+      <Image
+        src={src}
+        alt={alt}
+        width={pixels}
+        height={pixels}
+      />
+      {online && <span className="ui-avatar__status" aria-label="Online" />}
+    </span>
+  );
+}
+
+type SkeletonProps = {
+  width?: string;
+  height?: string;
+  circle?: boolean;
+  className?: string;
+};
+
+export function Skeleton({
+  width = "100%",
+  height = "16px",
+  circle = false,
+  className = "",
+}: SkeletonProps) {
+  return (
+    <span
+      className={`ui-skeleton ${circle ? "ui-skeleton--circle" : ""} ${className}`}
+      style={{ width, height }}
+      aria-hidden="true"
+    />
   );
 }
 
