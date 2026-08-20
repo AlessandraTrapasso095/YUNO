@@ -7,7 +7,25 @@ export type YunoProfile = {
   image: string;
   teaches: SkillId[];
   learns: SkillId[];
+  modes: LearningMode[];
+  languages: LanguageId[];
+  availability: AvailabilityId[];
+  distanceKm: number;
 };
+
+export type LearningMode = "online" | "inPerson";
+
+export type LanguageId =
+  | "italian"
+  | "english"
+  | "spanish"
+  | "portuguese"
+  | "german";
+
+export type AvailabilityId =
+  | "weekdays"
+  | "evenings"
+  | "weekends";
 
 export type SkillId =
   | "coding"
@@ -45,6 +63,10 @@ export const profiles: YunoProfile[] = [
     image: "/people/giulia.jpg",
     teaches: ["italian", "photography", "cooking"],
     learns: ["graphicDesign", "spanish", "piano"],
+    modes: ["inPerson"],
+    languages: ["italian"],
+    availability: ["weekends"],
+    distanceKm: 4,
   },
   {
     id: 2,
@@ -55,6 +77,10 @@ export const profiles: YunoProfile[] = [
     image: "/people/marco.jpg",
     teaches: ["photography", "lightroom", "portraits"],
     learns: ["portuguese", "guitar", "uxWriting"],
+    modes: ["online"],
+    languages: ["portuguese", "english"],
+    availability: ["weekdays"],
+    distanceKm: 18,
   },
   {
     id: 3,
@@ -65,6 +91,10 @@ export const profiles: YunoProfile[] = [
     image: "/people/sofia.jpg",
     teaches: ["spanish", "brandDesign", "figma"],
     learns: ["italian", "videoEditing", "yoga"],
+    modes: ["inPerson"],
+    languages: ["spanish", "english"],
+    availability: ["evenings"],
+    distanceKm: 7,
   },
   {
     id: 4,
@@ -75,6 +105,10 @@ export const profiles: YunoProfile[] = [
     image: "/people/luca.jpg",
     teaches: ["react", "typeScript", "webDesign"],
     learns: ["german", "piano", "cooking"],
+    modes: ["online"],
+    languages: ["german"],
+    availability: ["weekends"],
+    distanceKm: 26,
   },
 ];
 

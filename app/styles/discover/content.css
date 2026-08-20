@@ -23,6 +23,60 @@
 .profile-progress span.is-active { width: 20px; background: var(--violet); }
 .mobile-card-context { display: none; }
 
+.discover-empty-state {
+  display: flex;
+  min-height: 430px;
+  padding: 42px 30px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  border-radius: 30px;
+  background: var(--color-surface);
+  box-shadow: 0 20px 52px rgba(27,34,74,.08);
+}
+
+.discover-empty-state__icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 18px;
+  border-radius: 18px;
+  color: var(--violet);
+  background: var(--soft-violet);
+  place-items: center;
+}
+
+.discover-empty-state strong {
+  color: var(--navy);
+  font-size: 21px;
+  letter-spacing: -.025em;
+}
+
+.discover-empty-state p {
+  max-width: 290px;
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.discover-empty-state button {
+  min-height: 40px;
+  margin-top: 20px;
+  padding: 0 17px;
+  border: 0;
+  border-radius: 12px;
+  color: var(--white);
+  background: var(--gradient-horizontal);
+  font-size: 11px;
+  font-weight: 760;
+  box-shadow: 0 9px 22px rgba(121,87,255,.18);
+  cursor: pointer;
+}
+
+
 .context-panel {
   padding: 24px 20px;
   overflow: auto;

@@ -28,14 +28,31 @@ import { AppContextPanel } from "./AppContextPanel";
 import { AppShell } from "./AppShell";
 import { ProfileCard } from "./ProfileCard";
 import { DiscoverTutorial } from "./DiscoverTutorial";
+import {
+  DiscoverFiltersModal,
+  emptyDiscoverFilters,
+  type DiscoverFilters,
+} from "./DiscoverFiltersModal";
 import { Button, Input, Modal, Toast, Tooltip } from "./ui";
 
 const discoveryFilters = [
   { id: "forYou", labelKey: "discover.filters.forYou" },
   { id: "nearby", labelKey: "discover.filters.nearby" },
-  { id: "spanish", labelKey: "discover.filters.spanish", skillId: "spanish" },
-  { id: "design", labelKey: "discover.filters.design", skillId: "design" },
-  { id: "photography", labelKey: "discover.filters.photography", skillId: "photography" },
+  {
+    id: "spanish",
+    labelKey: "discover.filters.spanish",
+    skillIds: ["spanish"],
+  },
+  {
+    id: "design",
+    labelKey: "discover.filters.design",
+    skillIds: ["graphicDesign", "brandDesign", "webDesign"],
+  },
+  {
+    id: "photography",
+    labelKey: "discover.filters.photography",
+    skillIds: ["photography"],
+  },
 ] as const;
 
 type Notice = { key: string; parameters?: Record<string, string | number> };
@@ -118,6 +135,11 @@ export function DiscoverApp() {
   const [activeNav, setActiveNav] = useState<AppNavId>("discover");
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("forYou");
+  const [appliedFilters, setAppliedFilters] =
+    useState<DiscoverFilters>(emptyDiscoverFilters);
+  const [draftFilters, setDraftFilters] =
+    useState<DiscoverFilters>(emptyDiscoverFilters);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [profileIndex, setProfileIndex] = useState(0);
   const [savedIds, setSavedIds] = useState<number[]>([]);
   const [matchOpen, setMatchOpen] = useState(false);
@@ -132,23 +154,91 @@ export function DiscoverApp() {
   });
 
   const filteredProfiles = useMemo(() => {
-    const normalized = query.trim().toLowerCase();
-    const byQuery = normalized
-      ? profiles.filter((profile) => [
+    const normalized = query.trim().toLocaleLowerCase();
+
+    return profiles.filter((profile) => {
+      const matchesQuery =
+        !normalized ||
+        [
           ...profile.teaches.map((skill) => t(`skills.${skill}`)),
           ...profile.learns.map((skill) => t(`skills.${skill}`)),
           t(`profiles.${profile.key}.city`),
           t(`profiles.${profile.key}.country`),
           profile.name,
-        ].some((value) => value.toLocaleLowerCase().includes(normalized)))
-      : profiles;
-    const selectedFilter = discoveryFilters.find((filter) => filter.id === activeFilter);
-    if (!selectedFilter || !("skillId" in selectedFilter)) return byQuery;
-    return byQuery.filter((profile) => [...profile.teaches, ...profile.learns].includes(selectedFilter.skillId));
-  }, [activeFilter, query, t]);
+        ].some((value) =>
+          value.toLocaleLowerCase().includes(normalized),
+        );
 
-  const safeProfiles = filteredProfiles.length ? filteredProfiles : profiles;
-  const currentProfile = safeProfiles[profileIndex % safeProfiles.length];
+      if (!matchesQuery) return false;
+
+      const selectedFilter = discoveryFilters.find(
+        (filter) => filter.id === activeFilter,
+      );
+
+      if (
+        selectedFilter &&
+        "skillIds" in selectedFilter &&
+        !selectedFilter.skillIds.some((skill) =>
+          profile.teaches.includes(skill),
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        activeFilter === "nearby" &&
+        profile.distanceKm > 10
+      ) {
+        return false;
+      }
+
+      if (
+        appliedFilters.nearby &&
+        profile.distanceKm > 10
+      ) {
+        return false;
+      }
+
+      if (
+        appliedFilters.modes.length &&
+        !appliedFilters.modes.some((mode) =>
+          profile.modes.includes(mode),
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        appliedFilters.languages.length &&
+        !appliedFilters.languages.some((language) =>
+          profile.languages.includes(language),
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        appliedFilters.availability.length &&
+        !appliedFilters.availability.some((availability) =>
+          profile.availability.includes(availability),
+        )
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [activeFilter, appliedFilters, query, t]);
+
+  const activeAdvancedFilterCount =
+    appliedFilters.modes.length +
+    appliedFilters.languages.length +
+    appliedFilters.availability.length +
+    (appliedFilters.nearby ? 1 : 0);
+
+  const currentProfile = filteredProfiles.length
+    ? filteredProfiles[profileIndex % filteredProfiles.length]
+    : null;
 
   function completeTutorial() {
     window.localStorage.setItem(
@@ -166,10 +256,14 @@ export function DiscoverApp() {
       window.setTimeout(() => setNotice(null), 1800);
     }
 
-    setProfileIndex((index) => (index + 1) % safeProfiles.length);
+    if (!filteredProfiles.length) return;
+
+    setProfileIndex((index) => (index + 1) % filteredProfiles.length);
   }
 
   function toggleSave() {
+    if (!currentProfile) return;
+
     const alreadySaved = savedIds.includes(currentProfile.id);
     setSavedIds((ids) => alreadySaved ? ids.filter((id) => id !== currentProfile.id) : [...ids, currentProfile.id]);
     setNotice(alreadySaved
@@ -186,7 +280,29 @@ export function DiscoverApp() {
       overlays={
         <>
           <AnimatePresence>
-            {matchOpen && (
+            {filtersOpen && (
+              <DiscoverFiltersModal
+                value={draftFilters}
+                reduceMotion={Boolean(reduceMotion)}
+                onChange={setDraftFilters}
+                onClose={() => {
+                  setDraftFilters(appliedFilters);
+                  setFiltersOpen(false);
+                }}
+                onReset={() =>
+                  setDraftFilters(emptyDiscoverFilters)
+                }
+                onApply={() => {
+                  setAppliedFilters(draftFilters);
+                  setProfileIndex(0);
+                  setFiltersOpen(false);
+                }}
+              />
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {matchOpen && currentProfile && (
               <MatchCelebration
                 name={currentProfile.name}
                 image={currentProfile.image}
@@ -243,14 +359,31 @@ export function DiscoverApp() {
             trailingAction={query ? (
               <button
                 type="button"
-                onClick={() => setQuery("")}
+                onClick={() => {
+                  setQuery("");
+                  setProfileIndex(0);
+                }}
                 aria-label={t("discover.search.clear")}
               >
                 <X size={17} />
               </button>
             ) : undefined}
           />
-          <button className="filter-button" type="button"><SlidersHorizontal size={19} /><span>{t("discover.search.filters")}</span><em>2</em></button>
+          <button
+            className="filter-button"
+            type="button"
+            aria-expanded={filtersOpen}
+            onClick={() => {
+              setDraftFilters(appliedFilters);
+              setFiltersOpen(true);
+            }}
+          >
+            <SlidersHorizontal size={19} />
+            <span>{t("discover.search.filters")}</span>
+            {activeAdvancedFilterCount > 0 && (
+              <em>{activeAdvancedFilterCount}</em>
+            )}
+          </button>
         </div>
 
         <div className="discover-filters" role="group" aria-label={t("discover.search.filtersLabel")}>
@@ -262,48 +395,102 @@ export function DiscoverApp() {
         <div className="mobile-swipe-hint"><span>{t("discover.swipe.hint")}</span><span><X size={13} /> {t("discover.swipe.skip")}</span><span><Heart size={13} fill="currentColor" /> {t("discover.swipe.connect")}</span></div>
 
         <div className="discovery-stage">
-          <div className="card-stack-layer card-stack-layer--back" />
-          <div className="card-stack-layer card-stack-layer--middle" />
-          <AnimatePresence mode="wait">
-            <motion.div
-              className="discovery-stage__card"
-              key={currentProfile.id}
-              exit={
-                reduceMotion
-                  ? { opacity: 0 }
-                  : {
-                      opacity: 0,
-                      x: exitDirection * 64,
-                      rotate: exitDirection * 1.5,
-                      scale: 0.97,
+          {currentProfile ? (
+            <>
+              <div className="card-stack-layer card-stack-layer--back" />
+              <div className="card-stack-layer card-stack-layer--middle" />
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  className="discovery-stage__card"
+                  key={currentProfile.id}
+                  exit={
+                    reduceMotion
+                      ? { opacity: 0 }
+                      : {
+                          opacity: 0,
+                          x: exitDirection * 64,
+                          rotate: exitDirection * 1.5,
+                          scale: 0.97,
+                        }
+                  }
+                  transition={{
+                    duration: reduceMotion ? 0.01 : motionDuration.normal,
+                  }}
+                >
+                  <ProfileCard
+                    profile={currentProfile}
+                    mode="discover"
+                    draggable
+                    saved={savedIds.includes(currentProfile.id)}
+                    onSkip={() =>
+                      moveNext({ key: "discover.notices.skipped" }, -1)
                     }
-              }
-              transition={{ duration: reduceMotion ? 0.01 : motionDuration.normal }}
-            >
-              <ProfileCard
-                profile={currentProfile}
-                mode="discover"
-                draggable
-                saved={savedIds.includes(currentProfile.id)}
-                onSkip={() => moveNext({ key: "discover.notices.skipped" }, -1)}
-                onSave={toggleSave}
-                onConnect={() => setMatchOpen(true)}
-              />
-            </motion.div>
-          </AnimatePresence>
-          {tutorialOpen && (
-            <DiscoverTutorial onComplete={completeTutorial} />
+                    onSave={toggleSave}
+                    onConnect={() => setMatchOpen(true)}
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              {tutorialOpen && (
+                <DiscoverTutorial onComplete={completeTutorial} />
+              )}
+
+              <div
+                className="profile-progress"
+                aria-label={t("discover.profileCount", {
+                  current:
+                    (profileIndex % filteredProfiles.length) + 1,
+                  total: filteredProfiles.length,
+                })}
+              >
+                {filteredProfiles.map((profile, index) => (
+                  <span
+                    className={
+                      index === profileIndex % filteredProfiles.length
+                        ? "is-active"
+                        : ""
+                    }
+                    key={profile.id}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="discover-empty-state">
+              <span className="discover-empty-state__icon">
+                <Sparkles size={25} />
+              </span>
+              <strong>{t("discover.empty.title")}</strong>
+              <p>{t("discover.empty.copy")}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery("");
+                  setActiveFilter("forYou");
+                  setAppliedFilters(emptyDiscoverFilters);
+                  setDraftFilters(emptyDiscoverFilters);
+                  setProfileIndex(0);
+                }}
+              >
+                {t("discover.empty.reset")}
+              </button>
+            </div>
           )}
+        </div>
 
-          <div className="profile-progress" aria-label={t("discover.profileCount", { current: profileIndex + 1, total: safeProfiles.length })}>
-            {safeProfiles.map((profile, index) => <span className={index === profileIndex % safeProfiles.length ? "is-active" : ""} key={profile.id} />)}
+        {currentProfile && (
+          <div className="mobile-card-context">
+            <span>
+              <Clock3 size={15} />{" "}
+              {t(`profiles.${currentProfile.key}.availability`)}
+            </span>
+            <span>
+              <Star size={15} fill="currentColor" />{" "}
+              {t("discover.sessionCount")}
+            </span>
           </div>
-        </div>
-
-        <div className="mobile-card-context">
-          <span><Clock3 size={15} /> {t(`profiles.${currentProfile.key}.availability`)}</span>
-          <span><Star size={15} fill="currentColor" /> {t("discover.sessionCount")}</span>
-        </div>
+        )}
     </AppShell>
   );
 }
