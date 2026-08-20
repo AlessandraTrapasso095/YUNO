@@ -2,9 +2,9 @@
 .match-modal__close { position: absolute; z-index: 3; top: 16px; right: 16px; display: grid; width: 33px; height: 33px; border: 0; border-radius: 11px; color: var(--color-text-secondary); background: rgba(255,255,255,.8); place-items: center; cursor: pointer; }
 .match-modal__close svg { width: 17px; }
 .match-modal__avatars { position: relative; display: flex; margin: 9px auto 23px; align-items: center; justify-content: center; }
-.match-modal__avatars img { width: 84px; height: 84px; border: 4px solid var(--white); border-radius: 50%; object-fit: cover; box-shadow: var(--shadow-md); }
-.match-modal__avatars img:first-child { transform: translateX(9px) rotate(-6deg); }
-.match-modal__avatars img:last-child { transform: translateX(-9px) rotate(6deg); }
+.match-modal__avatars img { display: block; width: 84px; height: 84px; border: 4px solid var(--white); border-radius: 50%; object-fit: cover; box-shadow: var(--shadow-md); }
+.match-modal__avatars > div:first-child { transform: translateX(9px); }
+.match-modal__avatars > div:last-child { transform: translateX(-9px); }
 .match-modal__avatars span { position: relative; z-index: 2; display: grid; width: 43px; height: 43px; border: 4px solid var(--white); border-radius: 50%; color: var(--white); background: var(--gradient); box-shadow: 0 8px 22px rgba(240,68,183,.28); place-items: center; }
 .match-modal__avatars svg { width: 18px; }
 .match-modal__eyebrow { display: inline-flex; align-items: center; gap: 5px; color: var(--violet); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }

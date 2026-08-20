@@ -200,6 +200,31 @@ export const en = {
       message: "Send a message",
       keepDiscovering: "Keep discovering",
     },
+    tutorial: {
+      skip: {
+        eyebrow: "SKIP",
+        title: "Swipe left to skip",
+        copy: "Not the right skill match? Swipe the card left or tap Skip.",
+      },
+      connect: {
+        eyebrow: "CONNECT",
+        title: "Swipe right to connect",
+        copy: "Found someone interesting? Swipe right or tap Connect.",
+      },
+      save: {
+        eyebrow: "SAVE",
+        title: "Save profiles for later",
+        copy: "Tap Save when you want to come back to a profile without connecting yet.",
+      },
+      ready: {
+        eyebrow: "YOU'RE READY",
+        title: "Start discovering",
+        copy: "Teach what you know. Learn what you want.",
+      },
+      skipTutorial: "Skip tutorial",
+      next: "Next",
+      start: "Start",
+    },
     notices: {
       skipped: "Not this one — here’s someone new",
       removed: "Removed from saved",

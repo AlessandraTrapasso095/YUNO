@@ -181,3 +181,162 @@
     height: 490px;
   }
 }
+
+.discover-tutorial {
+  position: absolute;
+  z-index: 20;
+  inset: 0 0 34px;
+  display: flex;
+  padding: 18px;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.discover-tutorial__backdrop {
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  background: rgba(17, 25, 54, 0.24);
+  backdrop-filter: blur(1px);
+}
+
+.discover-tutorial__panel {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 340px);
+  padding: 17px;
+  border: 1px solid rgba(255,255,255,.74);
+  border-radius: 20px;
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 22px 50px rgba(17,25,54,.22);
+}
+
+.discover-tutorial__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.discover-tutorial__top > span {
+  color: var(--violet);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.discover-tutorial__skip {
+  padding: 0;
+  border: 0;
+  color: var(--color-text-secondary);
+  background: transparent;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.discover-tutorial__panel h3 {
+  margin: 9px 0 5px;
+  color: var(--navy);
+  font-size: 20px;
+  letter-spacing: -.025em;
+}
+
+.discover-tutorial__panel p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.discover-tutorial__footer {
+  display: flex;
+  margin-top: 15px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.discover-tutorial__dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.discover-tutorial__dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 99px;
+  background: #d7d9e4;
+  transition:
+    width var(--duration-fast) var(--ease-emphasized),
+    background var(--duration-fast) var(--ease-emphasized);
+}
+
+.discover-tutorial__dots span.is-active {
+  width: 18px;
+  background: var(--violet);
+}
+
+.discover-tutorial__next {
+  display: flex;
+  min-height: 36px;
+  padding: 0 14px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 0;
+  border-radius: 11px;
+  color: var(--white);
+  background: var(--gradient-horizontal);
+  font-size: 10px;
+  font-weight: 780;
+  box-shadow: 0 8px 20px rgba(121,87,255,.18);
+  cursor: pointer;
+}
+
+.discover-tutorial__gesture {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(255,255,255,.84);
+  border-radius: 18px;
+  color: var(--navy);
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 14px 32px rgba(17,25,54,.18);
+  place-items: center;
+  pointer-events: none;
+}
+
+.discover-tutorial__gesture svg {
+  width: 25px;
+  height: 25px;
+}
+
+.discover-tutorial__gesture--left {
+  top: 29%;
+  left: 20px;
+  color: var(--color-text-secondary);
+}
+
+.discover-tutorial__gesture--right {
+  top: 29%;
+  right: 20px;
+  color: var(--pink);
+}
+
+.discover-tutorial__gesture--save {
+  right: 28%;
+  bottom: 132px;
+  color: var(--violet);
+}
+
+.discover-tutorial__gesture--ready {
+  top: 27%;
+  left: 50%;
+  color: var(--violet);
+  transform: translateX(-50%);
+}

@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import { Bookmark, Heart, MapPin, RotateCcw, Sparkles, X } from "lucide-react";
 import type { YunoProfile } from "../data";
+import { profileCardEnter } from "../lib/motion";
 import { useI18n } from "../i18n/I18nProvider";
 import { SkillTag } from "./ui";
 
@@ -42,9 +43,9 @@ export function ProfileCard({
         if (info.offset.x > 110) onConnect?.();
         if (info.offset.x < -110) onSkip?.();
       }}
-      initial={reduceMotion ? false : { opacity: 0, y: 18, scale: 0.985 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: "spring", stiffness: 210, damping: 24 }}
+      variants={reduceMotion ? undefined : profileCardEnter}
+      initial={reduceMotion ? false : "hidden"}
+      animate={reduceMotion ? undefined : "visible"}
     >
       <div className="profile-card__image-wrap">
         <Image className="profile-card__image" src={profile.image} alt={t("profileCard.imageAlt", { name: profile.name, city })} fill sizes={mode === "discover" ? "(max-width: 760px) 100vw, 440px" : "(max-width: 760px) 86vw, 420px"} priority={mode === "hero"} />

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { languageMenu } from "../lib/motion";
 import { Check, ChevronDown } from "lucide-react";
 import { localeOptions, type Locale } from "../i18n/config";
 import { useI18n } from "../i18n/I18nProvider";
@@ -105,10 +106,10 @@ export function LanguageSwitcher({ variant = "compact" }: LanguageSwitcherProps)
             className="language-switcher__dropdown"
             role="menu"
             aria-label={t("language.selectorLabel")}
-            initial={reduceMotion ? false : { opacity: 0, y: -6, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4, scale: 0.985 }}
-            transition={{ duration: reduceMotion ? 0.01 : 0.16, ease: [0.16, 1, 0.3, 1] }}
+            variants={reduceMotion ? undefined : languageMenu}
+            initial={reduceMotion ? false : "hidden"}
+            animate={reduceMotion ? undefined : "visible"}
+            exit={reduceMotion ? { opacity: 0 } : "exit"}
           >
             {localeOptions.map((option, index) => {
               const selected = option.value === locale;

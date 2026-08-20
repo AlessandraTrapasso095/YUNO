@@ -4,6 +4,13 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
+  matchAvatarLeft,
+  matchAvatarRight,
+  matchHeart,
+  matchParticleTransition,
+  motionDuration,
+} from "../lib/motion";
+import {
   Bell,
   CalendarDays,
   Clock3,
@@ -25,6 +32,7 @@ import { useI18n } from "../i18n/I18nProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Logo } from "./Logo";
 import { ProfileCard } from "./ProfileCard";
+import { DiscoverTutorial } from "./DiscoverTutorial";
 import { Button, Input, Modal, SkillHourBadge, SkillTag, Toast, Tooltip } from "./ui";
 
 const navItems = [
@@ -68,16 +76,54 @@ function MatchCelebration({ name, image, onClose }: { name: string; image: strin
           <motion.span
             className="celebration-particle"
             key={index}
-            style={{ "--particle-color": index % 2 ? "#F044B7" : "#168BFF", "--particle-x": `${(index - 4.5) * 24}px` } as React.CSSProperties}
+            style={{
+              "--particle-color": index % 2 ? "#F044B7" : "#168BFF",
+              "--particle-x": `${(index - 4.5) * 24}px`,
+            } as React.CSSProperties}
             initial={{ opacity: 1, x: 0, y: 0, scale: 0 }}
-            animate={{ opacity: 0, x: (index - 4.5) * 24, y: -120 - (index % 3) * 22, scale: 1 }}
-            transition={{ duration: 1.1, delay: 0.14 + index * 0.025 }}
+            animate={{
+              opacity: 0,
+              x: (index - 4.5) * 24,
+              y: -110 - (index % 3) * 20,
+              scale: 1,
+            }}
+            transition={matchParticleTransition(index)}
           />
         ))}
         <div className="match-modal__avatars">
-          <Image src="/people/anna.jpg" alt={t("discover.match.yourProfile")} width={168} height={168} />
-          <span><Heart fill="currentColor" /></span>
-          <Image src={image} alt={name} width={168} height={168} />
+          <motion.div
+            variants={reduceMotion ? undefined : matchAvatarLeft}
+            initial={reduceMotion ? false : "hidden"}
+            animate={reduceMotion ? undefined : "visible"}
+          >
+            <Image
+              src="/people/anna.jpg"
+              alt={t("discover.match.yourProfile")}
+              width={168}
+              height={168}
+            />
+          </motion.div>
+
+          <motion.span
+            variants={reduceMotion ? undefined : matchHeart}
+            initial={reduceMotion ? false : "hidden"}
+            animate={reduceMotion ? undefined : "visible"}
+          >
+            <Heart fill="currentColor" />
+          </motion.span>
+
+          <motion.div
+            variants={reduceMotion ? undefined : matchAvatarRight}
+            initial={reduceMotion ? false : "hidden"}
+            animate={reduceMotion ? undefined : "visible"}
+          >
+            <Image
+              src={image}
+              alt={name}
+              width={168}
+              height={168}
+            />
+          </motion.div>
         </div>
         <span className="match-modal__eyebrow"><Sparkles size={14} /> {t("common.brandMatch")}</span>
         <h2>{t("discover.match.title", { name })}</h2>
@@ -90,6 +136,7 @@ function MatchCelebration({ name, image, onClose }: { name: string; image: strin
 
 export function DiscoverApp() {
   const { t } = useI18n();
+  const reduceMotion = useReducedMotion();
   const [activeNav, setActiveNav] = useState("discover");
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("forYou");
@@ -97,6 +144,14 @@ export function DiscoverApp() {
   const [savedIds, setSavedIds] = useState<number[]>([]);
   const [matchOpen, setMatchOpen] = useState(false);
   const [notice, setNotice] = useState<Notice | null>(null);
+  const [exitDirection, setExitDirection] = useState<-1 | 1>(-1);
+  const [tutorialOpen, setTutorialOpen] = useState(() => {
+    if (typeof window === "undefined") return false;
+
+    return !window.localStorage.getItem(
+      "yuno_discover_tutorial_seen",
+    );
+  });
 
   const filteredProfiles = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -117,11 +172,22 @@ export function DiscoverApp() {
   const safeProfiles = filteredProfiles.length ? filteredProfiles : profiles;
   const currentProfile = safeProfiles[profileIndex % safeProfiles.length];
 
-  function moveNext(nextNotice?: Notice) {
+  function completeTutorial() {
+    window.localStorage.setItem(
+      "yuno_discover_tutorial_seen",
+      "true",
+    );
+    setTutorialOpen(false);
+  }
+
+  function moveNext(nextNotice?: Notice, direction: -1 | 1 = -1) {
+    setExitDirection(direction);
+
     if (nextNotice) {
       setNotice(nextNotice);
       window.setTimeout(() => setNotice(null), 1800);
     }
+
     setProfileIndex((index) => (index + 1) % safeProfiles.length);
   }
 
@@ -218,18 +284,36 @@ export function DiscoverApp() {
           <div className="card-stack-layer card-stack-layer--back" />
           <div className="card-stack-layer card-stack-layer--middle" />
           <AnimatePresence mode="wait">
-            <motion.div className="discovery-stage__card" key={currentProfile.id} exit={{ opacity: 0, x: notice?.key === "discover.notices.skipped" ? -40 : 0, scale: 0.97 }} transition={{ duration: 0.2 }}>
+            <motion.div
+              className="discovery-stage__card"
+              key={currentProfile.id}
+              exit={
+                reduceMotion
+                  ? { opacity: 0 }
+                  : {
+                      opacity: 0,
+                      x: exitDirection * 64,
+                      rotate: exitDirection * 1.5,
+                      scale: 0.97,
+                    }
+              }
+              transition={{ duration: reduceMotion ? 0.01 : motionDuration.normal }}
+            >
               <ProfileCard
                 profile={currentProfile}
                 mode="discover"
                 draggable
                 saved={savedIds.includes(currentProfile.id)}
-                onSkip={() => moveNext({ key: "discover.notices.skipped" })}
+                onSkip={() => moveNext({ key: "discover.notices.skipped" }, -1)}
                 onSave={toggleSave}
                 onConnect={() => setMatchOpen(true)}
               />
             </motion.div>
           </AnimatePresence>
+          {tutorialOpen && (
+            <DiscoverTutorial onComplete={completeTutorial} />
+          )}
+
           <div className="profile-progress" aria-label={t("discover.profileCount", { current: profileIndex + 1, total: safeProfiles.length })}>
             {safeProfiles.map((profile, index) => <span className={index === profileIndex % safeProfiles.length ? "is-active" : ""} key={profile.id} />)}
           </div>
@@ -285,7 +369,10 @@ export function DiscoverApp() {
         ))}
       </nav>
 
-      <AnimatePresence>{matchOpen && <MatchCelebration name={currentProfile.name} image={currentProfile.image} onClose={() => { setMatchOpen(false); moveNext({ key: "discover.notices.connected", parameters: { name: currentProfile.name } }); }} />}</AnimatePresence>
+      <AnimatePresence>{matchOpen && <MatchCelebration name={currentProfile.name} image={currentProfile.image} onClose={() => { setMatchOpen(false); moveNext(
+          { key: "discover.notices.connected", parameters: { name: currentProfile.name } },
+          1,
+        ); }} />}</AnimatePresence>
       <AnimatePresence>
         {notice && (
           <Toast>{t(notice.key, notice.parameters)}</Toast>

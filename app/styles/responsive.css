@@ -42,7 +42,7 @@
   .discovery-points { justify-content: center; }
   .discover-preview__card { margin-inline: auto; }
   .final-cta__panel { padding: 42px; grid-template-columns: auto 1fr; }
-  .final-cta .button { grid-column: 2; justify-self: start; }
+  .final-cta__action { grid-column: 2; justify-self: start; }
   .loop-step__arrow { display: none; }
   .loop-flow { grid-template-columns: repeat(2,1fr); }
   .loop-flow::before { display: none; }
@@ -108,7 +108,8 @@
   .final-cta { padding-top: 65px; padding-bottom: 65px; }
   .final-cta__panel { min-height: 0; padding: 36px 24px; text-align: center; grid-template-columns: 1fr; gap: 22px; }
   .final-cta__mark { width: 74px; height: 74px; margin-inline: auto; }
-  .final-cta .button { width: 100%; grid-column: auto; justify-self: stretch; }
+  .final-cta__action { width: 100%; grid-column: auto; justify-self: stretch; }
+  .final-cta__action .button { width: 100%; }
   .site-footer {
     padding-top: 38px;
     padding-bottom: 24px;
@@ -245,5 +246,32 @@
   .info-page__content {
     margin-top: 80px;
     margin-bottom: 60px;
+  }
+}
+
+@media (max-width: 760px) {
+  .discover-tutorial {
+    inset: 0 0 17px;
+    padding: 14px;
+  }
+
+  .discover-tutorial__panel {
+    width: min(100%, 360px);
+    padding: 16px;
+  }
+
+  .discover-tutorial__gesture--left {
+    top: 27%;
+    left: 14px;
+  }
+
+  .discover-tutorial__gesture--right {
+    top: 27%;
+    right: 14px;
+  }
+
+  .discover-tutorial__gesture--save {
+    right: 25%;
+    bottom: 140px;
   }
 }

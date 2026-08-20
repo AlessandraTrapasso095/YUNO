@@ -20,29 +20,18 @@ import { floatingSkills, profiles } from "../data";
 import { useI18n } from "../i18n/I18nProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Logo } from "./Logo";
+import {
+  CtaMotion,
+  CtaMotionItem,
+  OrbitPop,
+  Reveal,
+  SkillHoursStory,
+  SkillHoursStoryItem,
+  Stagger,
+  StaggerItem,
+} from "./Motion";
 import { ProfileCard } from "./ProfileCard";
 import { AvatarStack, Button, SectionEyebrow } from "./ui";
-
-const reveal = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 },
-};
-
-function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  const reduceMotion = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      variants={reduceMotion ? undefined : reveal}
-      initial={reduceMotion ? undefined : "hidden"}
-      whileInView={reduceMotion ? undefined : "visible"}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -194,16 +183,16 @@ export function HomePage() {
             <h2>{t("homepage.how.title")}</h2>
             <p>{t("homepage.how.copy")}</p>
           </Reveal>
-          <Reveal className="loop-flow" delay={0.1}>
+          <Stagger className="loop-flow">
             {loopSteps.map((item, index) => (
-              <div className="loop-step" key={item.id}>
+              <StaggerItem className="loop-step" key={item.id}>
                 <div className="loop-step__top"><span>{item.n}</span><div>{item.icon}</div></div>
                 <h3>{t(`homepage.how.steps.${item.id}.title`)}</h3>
                 <p>{t(`homepage.how.steps.${item.id}.copy`)}</p>
                 {index < 3 && <ArrowRight className="loop-step__arrow" aria-hidden="true" />}
-              </div>
+              </StaggerItem>
             ))}
-          </Reveal>
+          </Stagger>
         </div>
       </section>
 
@@ -218,26 +207,39 @@ export function HomePage() {
           </div>
           <Button href="/discover" variant="secondary" icon>{t("homepage.hours.explore")}</Button>
         </Reveal>
-        <Reveal className="hours-story" delay={0.12}>
-          <div className="hours-story__person">
+        <SkillHoursStory className="hours-story">
+          <SkillHoursStoryItem className="hours-story__person">
             <Image src="/people/anna.jpg" alt="Anna" width={92} height={92} />
             <div><strong>{t("homepage.hours.annaTeaches")}</strong><span>{t("homepage.hours.toLuca")}</span></div>
             <span className="session-status"><Check size={13} /> {t("homepage.hours.done")}</span>
-          </div>
-          <div className="hours-story__line"><span /><ArrowDown /></div>
-          <motion.div className="reward-card" whileInView={{ scale: [0.96, 1.03, 1] }} viewport={{ once: true }} transition={{ delay: 0.35, duration: 0.55 }}>
+          </SkillHoursStoryItem>
+
+          <SkillHoursStoryItem className="hours-story__line" kind="line">
+            <span />
+            <ArrowDown />
+          </SkillHoursStoryItem>
+
+          <SkillHoursStoryItem className="reward-card" kind="reward">
             <div className="reward-card__glow" />
             <span className="reward-card__icon"><Sparkles fill="currentColor" /></span>
             <div><small>{t("homepage.hours.earned")}</small><strong>+1.0 <em>SH</em></strong></div>
-          </motion.div>
-          <div className="hours-story__line"><span /><ArrowDown /></div>
-          <div className="hours-story__person hours-story__person--learn">
+          </SkillHoursStoryItem>
+
+          <SkillHoursStoryItem className="hours-story__line" kind="line">
+            <span />
+            <ArrowDown />
+          </SkillHoursStoryItem>
+
+          <SkillHoursStoryItem className="hours-story__person hours-story__person--learn">
             <Image src="/people/marco.jpg" alt="Marco" width={92} height={92} />
             <div><strong>{t("homepage.hours.annaLearns")}</strong><span>{t("homepage.hours.fromMarco")}</span></div>
             <span className="session-status session-status--blue"><CalendarDays size={13} /> {t("homepage.hours.booked")}</span>
-          </div>
-          <p className="hours-story__note"><Sparkles size={14} /> {t("homepage.hours.noDirectMatch")}</p>
-        </Reveal>
+          </SkillHoursStoryItem>
+
+          <SkillHoursStoryItem className="hours-story__note">
+            <Sparkles size={14} /> {t("homepage.hours.noDirectMatch")}
+          </SkillHoursStoryItem>
+        </SkillHoursStory>
       </section>
 
       <section className="discover-preview">
@@ -253,25 +255,40 @@ export function HomePage() {
             </div>
             <Button href="/discover" icon>{t("homepage.discovery.cta")}</Button>
           </Reveal>
-          <Reveal className="discover-preview__card" delay={0.12}>
-            <div className="preview-orbit preview-orbit--camera"><Camera size={18} /><span>{t("skills.photography")}</span></div>
-            <div className="preview-orbit preview-orbit--hours"><Clock3 size={18} /><span>4.5 SH</span></div>
+          <div className="discover-preview__card">
+            <OrbitPop className="preview-orbit preview-orbit--camera" delay={0.38}>
+              <Camera size={18} />
+              <span>{t("skills.photography")}</span>
+            </OrbitPop>
+
+            <OrbitPop className="preview-orbit preview-orbit--hours" delay={0.52}>
+              <Clock3 size={18} />
+              <span>4.5 SH</span>
+            </OrbitPop>
+
             <ProfileCard profile={profiles[0]} mode="preview" />
-          </Reveal>
+          </div>
         </div>
       </section>
 
       <section className="final-cta section-shell">
-        <Reveal className="final-cta__panel">
-          <div className="final-cta__mark"><Image src="/img/favicon.png" alt="" width={1254} height={1254} /></div>
-          <div>
+        <CtaMotion className="final-cta__panel">
+          <CtaMotionItem className="final-cta__mark" mark>
+            <Image src="/img/favicon.png" alt="" width={1254} height={1254} />
+          </CtaMotionItem>
+
+          <CtaMotionItem className="final-cta__copy">
             <span>{t("common.brandQuestion")}</span>
             <h2>{t("homepage.finalCta.title")}</h2>
-          </div>
-          <Button href="/discover" icon>{t("navigation.join")}</Button>
+          </CtaMotionItem>
+
+          <CtaMotionItem className="final-cta__action">
+            <Button href="/discover" icon>{t("navigation.join")}</Button>
+          </CtaMotionItem>
+
           <div className="final-cta__orb final-cta__orb--one" />
           <div className="final-cta__orb final-cta__orb--two" />
-        </Reveal>
+        </CtaMotion>
       </section>
 
       <footer className="site-footer section-shell">

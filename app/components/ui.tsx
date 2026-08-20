@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
+import { modalContent, modalOverlay, toastMotion } from "../lib/motion";
 import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
 import { ArrowUpRight, Check, Clock3 } from "lucide-react";
 import { useI18n } from "../i18n/I18nProvider";
@@ -146,16 +147,17 @@ export function Modal({
       role="dialog"
       aria-modal="true"
       aria-label={ariaLabel}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      variants={modalOverlay}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
     >
       <motion.div
         className={`ui-modal ${className}`}
-        initial={reduceMotion ? false : { opacity: 0, scale: 0.82, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.94 }}
-        transition={{ type: "spring", stiffness: 220, damping: 20 }}
+        variants={reduceMotion ? undefined : modalContent}
+        initial={reduceMotion ? false : "hidden"}
+        animate={reduceMotion ? undefined : "visible"}
+        exit={reduceMotion ? { opacity: 0 } : "exit"}
       >
         {children}
       </motion.div>
@@ -172,9 +174,10 @@ export function Toast({ children, className = "" }: ToastProps) {
   return (
     <motion.div
       className={`app-toast ${className}`}
-      initial={{ opacity: 0, y: 16, x: "-50%" }}
-      animate={{ opacity: 1, y: 0, x: "-50%" }}
-      exit={{ opacity: 0, y: 10, x: "-50%" }}
+      variants={toastMotion}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
       role="status"
       aria-live="polite"
     >

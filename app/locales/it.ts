@@ -206,6 +206,31 @@ export const it: DictionaryShape<TranslationDictionary> = {
       message: "Invia un messaggio",
       keepDiscovering: "Continua a scoprire",
     },
+    tutorial: {
+      skip: {
+        eyebrow: "SALTA",
+        title: "Scorri a sinistra per saltare",
+        copy: "Non è il match giusto? Scorri la card verso sinistra oppure tocca Salta.",
+      },
+      connect: {
+        eyebrow: "CONNETTITI",
+        title: "Scorri a destra per connetterti",
+        copy: "Hai trovato una persona interessante? Scorri a destra oppure tocca Connettiti.",
+      },
+      save: {
+        eyebrow: "SALVA",
+        title: "Salva i profili per dopo",
+        copy: "Tocca Salva se vuoi ritrovare un profilo più tardi senza connetterti subito.",
+      },
+      ready: {
+        eyebrow: "CI SEI",
+        title: "Inizia a scoprire",
+        copy: "Insegna ciò che sai. Impara ciò che vuoi.",
+      },
+      skipTutorial: "Salta tutorial",
+      next: "Avanti",
+      start: "Inizia",
+    },
     notices: {
       skipped: "Non fa per te — ecco una nuova persona",
       removed: "Rimosso dai salvati",
