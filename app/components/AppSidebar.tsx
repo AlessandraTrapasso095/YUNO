@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { HelpCircle, UsersRound } from "lucide-react";
+import type { CurrentUserProfile } from "../data";
 import { appNavItems, type AppNavId } from "../lib/app-navigation";
 import { useI18n } from "../i18n/I18nProvider";
 import { Logo } from "./Logo";
@@ -10,12 +11,14 @@ type AppSidebarProps = {
   activeNav: AppNavId;
   onNavigate: (id: AppNavId) => void;
   matchCount?: number;
+  userProfile: CurrentUserProfile;
 };
 
 export function AppSidebar({
   activeNav,
   onNavigate,
   matchCount = 0,
+  userProfile,
 }: AppSidebarProps) {
   const { t } = useI18n();
 
@@ -55,19 +58,24 @@ export function AppSidebar({
         <HelpCircle size={19} /> {t("navigation.help")}
       </button>
 
-      <div className="sidebar-profile">
+      <button
+        className="sidebar-profile"
+        type="button"
+        onClick={() => onNavigate("profile")}
+      >
         <Image
-          src="/people/anna.jpg"
-          alt="Alessandra"
+          src={userProfile.image}
+          alt={userProfile.name}
           width={72}
           height={72}
+          unoptimized={userProfile.image.startsWith("data:")}
         />
         <div>
-          <strong>Alessandra</strong>
+          <strong>{userProfile.name}</strong>
           <span>{t("navigation.viewProfile")}</span>
         </div>
         <span className="sidebar-profile__more">•••</span>
-      </div>
+      </button>
     </aside>
   );
 }

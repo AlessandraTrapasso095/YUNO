@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
@@ -20,7 +20,11 @@ import {
   Star,
   X,
 } from "lucide-react";
-import { profiles } from "../data";
+import {
+  currentUserProfile,
+  profiles,
+  type CurrentUserProfile,
+} from "../data";
 import { type AppNavId } from "../lib/app-navigation";
 import { useI18n } from "../i18n/I18nProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -30,6 +34,7 @@ import { ProfileCard } from "./ProfileCard";
 import { playYunoSound } from "../lib/sound";
 import { MatchesView } from "./MatchesView";
 import { ConversationView } from "./ConversationView";
+import { ProfileView } from "./ProfileView";
 import { DiscoverTutorial } from "./DiscoverTutorial";
 import {
   DiscoverFiltersModal,
@@ -63,11 +68,13 @@ type Notice = { key: string; parameters?: Record<string, string | number> };
 function MatchCelebration({
   name,
   image,
+  yourImage,
   onMessage,
   onKeepDiscovering,
 }: {
   name: string;
   image: string;
+  yourImage: string;
   onMessage: () => void;
   onKeepDiscovering: () => void;
 }) {
@@ -105,10 +112,11 @@ function MatchCelebration({
             animate={reduceMotion ? undefined : "visible"}
           >
             <Image
-              src="/people/anna.jpg"
+              src={yourImage}
               alt={t("discover.match.yourProfile")}
               width={168}
               height={168}
+              unoptimized={yourImage.startsWith("data:")}
             />
           </motion.div>
 
@@ -152,6 +160,48 @@ export function DiscoverApp() {
   const { t } = useI18n();
   const reduceMotion = useReducedMotion();
   const [activeNav, setActiveNav] = useState<AppNavId>("discover");
+  const [userProfile, setUserProfile] =
+    useState<CurrentUserProfile>(() => {
+      if (typeof window === "undefined") {
+        return currentUserProfile;
+      }
+
+      try {
+        const stored = window.localStorage.getItem(
+          "yuno_current_user_profile",
+        );
+
+        if (!stored) return currentUserProfile;
+
+        const parsed = JSON.parse(stored) as CurrentUserProfile;
+
+        return {
+          ...currentUserProfile,
+          ...parsed,
+          teaches: Array.isArray(parsed.teaches)
+            ? parsed.teaches
+            : currentUserProfile.teaches,
+          learns: Array.isArray(parsed.learns)
+            ? parsed.learns
+            : currentUserProfile.learns,
+          modes: Array.isArray(parsed.modes)
+            ? parsed.modes
+            : currentUserProfile.modes,
+          languages: Array.isArray(parsed.languages)
+            ? parsed.languages
+            : currentUserProfile.languages,
+          availability: Array.isArray(parsed.availability)
+            ? parsed.availability
+            : currentUserProfile.availability,
+        };
+      } catch {
+        window.localStorage.removeItem(
+          "yuno_current_user_profile",
+        );
+
+        return currentUserProfile;
+      }
+    });
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("forYou");
   const [appliedFilters, setAppliedFilters] =
@@ -173,6 +223,17 @@ export function DiscoverApp() {
       "yuno_discover_tutorial_seen",
     );
   });
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        "yuno_current_user_profile",
+        JSON.stringify(userProfile),
+      );
+    } catch {
+      // Backend persistence will replace this temporary storage later.
+    }
+  }, [userProfile]);
 
   const filteredProfiles = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
@@ -315,6 +376,7 @@ export function DiscoverApp() {
       activeNav={activeNav}
       onNavigate={setActiveNav}
       matchCount={matchedProfiles.length}
+      userProfile={userProfile}
       context={
         activeNav === "discover" ? <AppContextPanel /> : undefined
       }
@@ -347,6 +409,7 @@ export function DiscoverApp() {
               <MatchCelebration
                 name={currentProfile.name}
                 image={currentProfile.image}
+                yourImage={userProfile.image}
                 onMessage={() => {
                   setMessageProfileId(currentProfile.id);
                   setMatchOpen(false);
@@ -392,6 +455,11 @@ export function DiscoverApp() {
         <ConversationView
           profile={messageProfile}
           onBack={() => setActiveNav("matches")}
+        />
+      ) : activeNav === "profile" ? (
+        <ProfileView
+          profile={userProfile}
+          onProfileChange={setUserProfile}
         />
       ) : (
         <>

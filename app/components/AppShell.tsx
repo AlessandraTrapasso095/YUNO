@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import type { CurrentUserProfile } from "../data";
 import type { AppNavId } from "../lib/app-navigation";
 import { AppSidebar } from "./AppSidebar";
 import { MobileAppHeader } from "./MobileAppHeader";
@@ -10,6 +11,7 @@ type AppShellProps = {
   activeNav: AppNavId;
   onNavigate: (id: AppNavId) => void;
   matchCount?: number;
+  userProfile: CurrentUserProfile;
   children: ReactNode;
   context?: ReactNode;
   overlays?: ReactNode;
@@ -19,6 +21,7 @@ export function AppShell({
   activeNav,
   onNavigate,
   matchCount = 0,
+  userProfile,
   children,
   context,
   overlays,
@@ -29,6 +32,7 @@ export function AppShell({
         activeNav={activeNav}
         onNavigate={onNavigate}
         matchCount={matchCount}
+        userProfile={userProfile}
       />
 
       <section className="discovery-main">
