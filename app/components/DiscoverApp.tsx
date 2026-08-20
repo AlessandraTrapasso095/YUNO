@@ -12,45 +12,23 @@ import {
 } from "../lib/motion";
 import {
   Bell,
-  CalendarDays,
   Clock3,
-  Compass,
   Heart,
-  HelpCircle,
-  MessageCircle,
   Search,
   SlidersHorizontal,
   Sparkles,
   Star,
-  UserRound,
-  UsersRound,
-  WalletCards,
   X,
 } from "lucide-react";
 import { profiles } from "../data";
+import { type AppNavId } from "../lib/app-navigation";
 import { useI18n } from "../i18n/I18nProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { Logo } from "./Logo";
+import { AppContextPanel } from "./AppContextPanel";
+import { AppShell } from "./AppShell";
 import { ProfileCard } from "./ProfileCard";
 import { DiscoverTutorial } from "./DiscoverTutorial";
-import { Button, Input, Modal, SkillHourBadge, SkillTag, Toast, Tooltip } from "./ui";
-
-const navItems = [
-  { id: "discover", labelKey: "navigation.discover", icon: Compass },
-  { id: "matches", labelKey: "navigation.matches", icon: Heart, badge: "3" },
-  { id: "messages", labelKey: "navigation.messages", icon: MessageCircle, badge: "2" },
-  { id: "sessions", labelKey: "navigation.sessions", icon: CalendarDays },
-  { id: "skillHours", labelKey: "navigation.skillHours", icon: WalletCards },
-  { id: "profile", labelKey: "navigation.profile", icon: UserRound },
-];
-
-const mobileItems = [
-  { id: "discover", labelKey: "navigation.discover", icon: Compass },
-  { id: "matches", labelKey: "navigation.matches", icon: Heart },
-  { id: "sessions", labelKey: "navigation.sessions", icon: CalendarDays },
-  { id: "messages", labelKey: "navigation.chat", icon: MessageCircle, badge: true },
-  { id: "profile", labelKey: "navigation.profile", icon: UserRound },
-];
+import { Button, Input, Modal, Toast, Tooltip } from "./ui";
 
 const discoveryFilters = [
   { id: "forYou", labelKey: "discover.filters.forYou" },
@@ -137,7 +115,7 @@ function MatchCelebration({ name, image, onClose }: { name: string; image: strin
 export function DiscoverApp() {
   const { t } = useI18n();
   const reduceMotion = useReducedMotion();
-  const [activeNav, setActiveNav] = useState("discover");
+  const [activeNav, setActiveNav] = useState<AppNavId>("discover");
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("forYou");
   const [profileIndex, setProfileIndex] = useState(0);
@@ -201,36 +179,39 @@ export function DiscoverApp() {
   }
 
   return (
-    <main className="discover-app">
-      <aside className="app-sidebar">
-        <div className="app-sidebar__brand"><Logo /></div>
-        <nav className="app-sidebar__nav" aria-label={t("navigation.appLabel")}>
-          {navItems.map(({ id, labelKey, icon: Icon, badge }) => (
-            <button className={activeNav === id ? "is-active" : ""} key={id} type="button" onClick={() => setActiveNav(id)}>
-              <Icon size={20} /><span>{t(labelKey)}</span>{badge && <em>{badge}</em>}
-            </button>
-          ))}
-        </nav>
-        <div className="sidebar-invite">
-          <span><UsersRound /></span>
-          <strong>{t("discover.sidebar.title")}</strong>
-          <p>{t("discover.sidebar.copy")}</p>
-          <button type="button">{t("discover.sidebar.invite")}</button>
-        </div>
-        <button className="sidebar-help" type="button"><HelpCircle size={19} /> {t("navigation.help")}</button>
-        <div className="sidebar-profile">
-          <Image src="/people/anna.jpg" alt="Alessandra" width={72} height={72} />
-          <div><strong>Alessandra</strong><span>{t("navigation.viewProfile")}</span></div>
-          <span className="sidebar-profile__more">•••</span>
-        </div>
-      </aside>
+    <AppShell
+      activeNav={activeNav}
+      onNavigate={setActiveNav}
+      context={<AppContextPanel />}
+      overlays={
+        <>
+          <AnimatePresence>
+            {matchOpen && (
+              <MatchCelebration
+                name={currentProfile.name}
+                image={currentProfile.image}
+                onClose={() => {
+                  setMatchOpen(false);
+                  moveNext(
+                    {
+                      key: "discover.notices.connected",
+                      parameters: { name: currentProfile.name },
+                    },
+                    1,
+                  );
+                }}
+              />
+            )}
+          </AnimatePresence>
 
-      <section className="discovery-main">
-        <header className="mobile-app-header">
-          <Logo />
-          <div><SkillHourBadge compact /><LanguageSwitcher variant="flag" /><button type="button" aria-label={t("navigation.notifications")}><Bell size={20} /></button></div>
-        </header>
-
+          <AnimatePresence>
+            {notice && (
+              <Toast>{t(notice.key, notice.parameters)}</Toast>
+            )}
+          </AnimatePresence>
+        </>
+      }
+    >
         <div className="discovery-main__header">
           <div>
             <span className="app-kicker">{t("discover.header.kicker")}</span>
@@ -323,61 +304,6 @@ export function DiscoverApp() {
           <span><Clock3 size={15} /> {t(`profiles.${currentProfile.key}.availability`)}</span>
           <span><Star size={15} fill="currentColor" /> {t("discover.sessionCount")}</span>
         </div>
-      </section>
-
-      <aside className="context-panel">
-        <div className="context-panel__top"><span>{t("discover.context.yourDay")}</span><button type="button" aria-label={t("discover.context.panelSettings")}>•••</button></div>
-        <section className="balance-card">
-          <div className="balance-card__header"><span><Clock3 size={17} /> {t("discover.context.yourSkillHours")}</span><Sparkles size={16} /></div>
-          <div className="balance-card__amount"><strong>4.5</strong><span>SH</span></div>
-          <div className="balance-card__meter"><span /></div>
-          <p>{t("discover.context.balanceCopy")}</p>
-          <button type="button">{t("discover.context.viewActivity")} <span>→</span></button>
-        </section>
-
-        <section className="next-session-card">
-          <div className="context-card-heading"><span>{t("discover.context.nextSession")}</span><button type="button">{t("discover.context.viewAll")}</button></div>
-          <div className="session-person">
-            <Image src="/people/sofia.jpg" alt="Sofia" width={84} height={84} />
-            <div><strong>{t("discover.context.spanishWithSofia")}</strong><span><span className="online-dot" /> {t("discover.context.confirmed")}</span></div>
-          </div>
-          <div className="session-time">
-            <span><CalendarDays size={17} /> {t("discover.context.today")}</span>
-            <span><Clock3 size={17} /> 18:30</span>
-          </div>
-          <button className="session-join" type="button">{t("discover.context.viewSession")}</button>
-        </section>
-
-        <section className="weekly-card">
-          <div className="weekly-card__icon"><Sparkles /></div>
-          <div><strong>{t("discover.context.streakTitle")}</strong><p>{t("discover.context.streakCopy")}</p></div>
-        </section>
-
-        <section className="popular-now">
-          <div className="context-card-heading"><span>{t("discover.context.popular")}</span></div>
-          <div><SkillTag kind="teach">{t("skills.italian")}</SkillTag><small>{t("discover.context.people", { count: 42 })}</small></div>
-          <div><SkillTag kind="learn">{t("skills.piano")}</SkillTag><small>{t("discover.context.people", { count: 28 })}</small></div>
-          <div><SkillTag kind="neutral">{t("skills.marketing")}</SkillTag><small>{t("discover.context.people", { count: 21 })}</small></div>
-        </section>
-      </aside>
-
-      <nav className="mobile-bottom-nav" aria-label={t("navigation.mobileAppLabel")}>
-        {mobileItems.map(({ id, labelKey, icon: Icon, badge }) => (
-          <button className={activeNav === id ? "is-active" : ""} type="button" key={id} onClick={() => setActiveNav(id)}>
-            <span><Icon size={22} />{badge && <em />}</span><small>{t(labelKey)}</small>
-          </button>
-        ))}
-      </nav>
-
-      <AnimatePresence>{matchOpen && <MatchCelebration name={currentProfile.name} image={currentProfile.image} onClose={() => { setMatchOpen(false); moveNext(
-          { key: "discover.notices.connected", parameters: { name: currentProfile.name } },
-          1,
-        ); }} />}</AnimatePresence>
-      <AnimatePresence>
-        {notice && (
-          <Toast>{t(notice.key, notice.parameters)}</Toast>
-        )}
-      </AnimatePresence>
-    </main>
+    </AppShell>
   );
 }
