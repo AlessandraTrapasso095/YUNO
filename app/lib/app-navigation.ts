@@ -33,7 +33,7 @@ type MobileAppNavItem = {
 
 export const appNavItems: readonly AppNavItem[] = [
   { id: "discover", labelKey: "navigation.discover", icon: Compass },
-  { id: "matches", labelKey: "navigation.matches", icon: Heart, badge: "3" },
+  { id: "matches", labelKey: "navigation.matches", icon: Heart },
   { id: "messages", labelKey: "navigation.messages", icon: MessageCircle, badge: "2" },
   { id: "sessions", labelKey: "navigation.sessions", icon: CalendarDays },
   { id: "skillHours", labelKey: "navigation.skillHours", icon: WalletCards },

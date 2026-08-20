@@ -18,5 +18,7 @@
 @import "./styles/discover/content.css";
 @import "./styles/discover/feedback.css";
 @import "./styles/components/skill-hours.css";
+@import "./styles/matches.css";
+@import "./styles/messages.css";
 
 @import "./styles/responsive.css";

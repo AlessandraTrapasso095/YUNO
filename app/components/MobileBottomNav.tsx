@@ -9,11 +9,13 @@ import { useI18n } from "../i18n/I18nProvider";
 type MobileBottomNavProps = {
   activeNav: AppNavId;
   onNavigate: (id: AppNavId) => void;
+  matchCount?: number;
 };
 
 export function MobileBottomNav({
   activeNav,
   onNavigate,
+  matchCount = 0,
 }: MobileBottomNavProps) {
   const { t } = useI18n();
 
@@ -31,7 +33,11 @@ export function MobileBottomNav({
         >
           <span>
             <Icon size={22} />
-            {badge && <em />}
+            {id === "matches" && matchCount > 0 ? (
+              <em>{matchCount}</em>
+            ) : (
+              badge && <em />
+            )}
           </span>
           <small>{t(labelKey)}</small>
         </button>

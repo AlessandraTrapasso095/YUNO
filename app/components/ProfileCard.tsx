@@ -1,7 +1,14 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "motion/react";
 import Image from "next/image";
+import { useRef } from "react";
 import { Bookmark, Heart, MapPin, RotateCcw, Sparkles, X } from "lucide-react";
 import type { YunoProfile } from "../data";
 import { profileCardEnter } from "../lib/motion";
@@ -15,7 +22,7 @@ type ProfileCardProps = {
   saved?: boolean;
   onSkip?: () => void;
   onSave?: () => void;
-  onConnect?: () => void;
+  onConnect?: (source?: "button" | "swipe") => void;
 };
 
 export function ProfileCard({
@@ -28,6 +35,39 @@ export function ProfileCard({
   onConnect,
 }: ProfileCardProps) {
   const reduceMotion = useReducedMotion();
+  const swipeTriggered = useRef(false);
+  const x = useMotionValue(0);
+
+  const rotate = useTransform(
+    x,
+    [-220, 0, 220],
+    [-7, 0, 7],
+  );
+
+  const skipOpacity = useTransform(
+    x,
+    [-150, -45, 0],
+    [1, 0.18, 0],
+  );
+
+  const connectOpacity = useTransform(
+    x,
+    [0, 45, 150],
+    [0, 0.18, 1],
+  );
+
+  const skipScale = useTransform(
+    x,
+    [-150, -45, 0],
+    [1.08, 0.92, 0.88],
+  );
+
+  const connectScale = useTransform(
+    x,
+    [0, 45, 150],
+    [0.88, 0.92, 1.08],
+  );
+
   const { t } = useI18n();
   const city = t(`profiles.${profile.key}.city`);
   const country = t(`profiles.${profile.key}.country`);
@@ -37,17 +77,76 @@ export function ProfileCard({
       className={`profile-card profile-card--${mode}`}
       drag={draggable && !reduceMotion ? "x" : false}
       dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.16}
-      whileDrag={{ rotate: 2.4, scale: 1.015, cursor: "grabbing" }}
+      dragElastic={0.2}
+      dragMomentum={false}
+      style={
+        draggable && !reduceMotion
+          ? { x, rotate }
+          : undefined
+      }
+      whileDrag={{ scale: 1.015, cursor: "grabbing" }}
+      onDragStart={() => {
+        swipeTriggered.current = false;
+      }}
       onDragEnd={(_, info) => {
-        if (info.offset.x > 110) onConnect?.();
-        if (info.offset.x < -110) onSkip?.();
+        if (swipeTriggered.current) return;
+
+        if (info.offset.x > 110) {
+          swipeTriggered.current = true;
+
+          void animate(
+            x,
+            typeof window !== "undefined"
+              ? window.innerWidth * 1.15
+              : 900,
+            {
+              duration: 0.22,
+              ease: [0.22, 1, 0.36, 1],
+            },
+          );
+
+          onConnect?.("swipe");
+          return;
+        }
+
+        if (info.offset.x < -110) {
+          swipeTriggered.current = true;
+          onSkip?.();
+        }
       }}
       variants={reduceMotion ? undefined : profileCardEnter}
       initial={reduceMotion ? false : "hidden"}
       animate={reduceMotion ? undefined : "visible"}
     >
       <div className="profile-card__image-wrap">
+        {draggable && !reduceMotion && (
+          <>
+            <motion.div
+              className="profile-card__swipe-feedback profile-card__swipe-feedback--skip"
+              style={{
+                opacity: skipOpacity,
+                scale: skipScale,
+              }}
+              aria-hidden="true"
+            >
+              <X size={18} />
+              <span>{t("profileCard.skip")}</span>
+            </motion.div>
+
+            <motion.div
+              className="profile-card__swipe-feedback profile-card__swipe-feedback--connect"
+              style={{
+                opacity: connectOpacity,
+                scale: connectScale,
+              }}
+              aria-hidden="true"
+            >
+              <Heart size={18} fill="currentColor" />
+              <span>{t("profileCard.connect")}</span>
+            </motion.div>
+          </>
+        )}
+
         <Image className="profile-card__image" src={profile.image} alt={t("profileCard.imageAlt", { name: profile.name, city })} fill sizes={mode === "discover" ? "(max-width: 760px) 100vw, 440px" : "(max-width: 760px) 86vw, 420px"} priority={mode === "hero"} />
         <div className="profile-card__shade" />
         <span className="profile-card__match"><Sparkles size={14} fill="currentColor" /> {profile.match}% {t("profileCard.skillMatch")}</span>
@@ -85,7 +184,7 @@ export function ProfileCard({
               <Bookmark fill={saved ? "currentColor" : "none"} />
               <span>{saved ? t("profileCard.saved") : t("profileCard.save")}</span>
             </button>
-            <button className="profile-action profile-action--connect" type="button" onClick={onConnect} aria-label={t("profileCard.connectAria", { name: profile.name })}>
+            <button className="profile-action profile-action--connect" type="button" onClick={() => onConnect?.("button")} aria-label={t("profileCard.connectAria", { name: profile.name })}>
               <Heart fill="currentColor" />
               <span>{t("profileCard.connect")}</span>
             </button>

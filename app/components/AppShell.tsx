@@ -9,6 +9,7 @@ import { MobileBottomNav } from "./MobileBottomNav";
 type AppShellProps = {
   activeNav: AppNavId;
   onNavigate: (id: AppNavId) => void;
+  matchCount?: number;
   children: ReactNode;
   context?: ReactNode;
   overlays?: ReactNode;
@@ -17,6 +18,7 @@ type AppShellProps = {
 export function AppShell({
   activeNav,
   onNavigate,
+  matchCount = 0,
   children,
   context,
   overlays,
@@ -26,6 +28,7 @@ export function AppShell({
       <AppSidebar
         activeNav={activeNav}
         onNavigate={onNavigate}
+        matchCount={matchCount}
       />
 
       <section className="discovery-main">
@@ -38,6 +41,7 @@ export function AppShell({
       <MobileBottomNav
         activeNav={activeNav}
         onNavigate={onNavigate}
+        matchCount={matchCount}
       />
 
       {overlays}

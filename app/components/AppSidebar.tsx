@@ -9,9 +9,14 @@ import { Logo } from "./Logo";
 type AppSidebarProps = {
   activeNav: AppNavId;
   onNavigate: (id: AppNavId) => void;
+  matchCount?: number;
 };
 
-export function AppSidebar({ activeNav, onNavigate }: AppSidebarProps) {
+export function AppSidebar({
+  activeNav,
+  onNavigate,
+  matchCount = 0,
+}: AppSidebarProps) {
   const { t } = useI18n();
 
   return (
@@ -30,7 +35,11 @@ export function AppSidebar({ activeNav, onNavigate }: AppSidebarProps) {
           >
             <Icon size={20} />
             <span>{t(labelKey)}</span>
-            {badge && <em>{badge}</em>}
+            {id === "matches" && matchCount > 0 ? (
+              <em>{matchCount}</em>
+            ) : (
+              badge && <em>{badge}</em>
+            )}
           </button>
         ))}
       </nav>

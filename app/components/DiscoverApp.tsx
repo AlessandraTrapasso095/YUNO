@@ -27,6 +27,9 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { AppContextPanel } from "./AppContextPanel";
 import { AppShell } from "./AppShell";
 import { ProfileCard } from "./ProfileCard";
+import { playYunoSound } from "../lib/sound";
+import { MatchesView } from "./MatchesView";
+import { ConversationView } from "./ConversationView";
 import { DiscoverTutorial } from "./DiscoverTutorial";
 import {
   DiscoverFiltersModal,
@@ -57,7 +60,17 @@ const discoveryFilters = [
 
 type Notice = { key: string; parameters?: Record<string, string | number> };
 
-function MatchCelebration({ name, image, onClose }: { name: string; image: string; onClose: () => void }) {
+function MatchCelebration({
+  name,
+  image,
+  onMessage,
+  onKeepDiscovering,
+}: {
+  name: string;
+  image: string;
+  onMessage: () => void;
+  onKeepDiscovering: () => void;
+}) {
   const reduceMotion = useReducedMotion();
   const { t } = useI18n();
   return (
@@ -66,7 +79,7 @@ function MatchCelebration({ name, image, onClose }: { name: string; image: strin
       className="match-modal"
       reduceMotion={Boolean(reduceMotion)}
     >
-        <button className="match-modal__close" type="button" onClick={onClose} aria-label={t("common.close")}><X /></button>
+        <button className="match-modal__close" type="button" onClick={onKeepDiscovering} aria-label={t("common.close")}><X /></button>
         {!reduceMotion && Array.from({ length: 10 }).map((_, index) => (
           <motion.span
             className="celebration-particle"
@@ -123,8 +136,14 @@ function MatchCelebration({ name, image, onClose }: { name: string; image: strin
         <span className="match-modal__eyebrow"><Sparkles size={14} /> {t("common.brandMatch")}</span>
         <h2>{t("discover.match.title", { name })}</h2>
         <p>{t("discover.match.copy")}</p>
-        <Button onClick={onClose}>{t("discover.match.message")}</Button>
-        <button className="match-modal__keep" type="button" onClick={onClose}>{t("discover.match.keepDiscovering")}</button>
+        <Button onClick={onMessage}>{t("discover.match.message")}</Button>
+        <button
+          className="match-modal__keep"
+          type="button"
+          onClick={onKeepDiscovering}
+        >
+          {t("discover.match.keepDiscovering")}
+        </button>
     </Modal>
   );
 }
@@ -142,6 +161,8 @@ export function DiscoverApp() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [profileIndex, setProfileIndex] = useState(0);
   const [savedIds, setSavedIds] = useState<number[]>([]);
+  const [matchedIds, setMatchedIds] = useState<number[]>([]);
+  const [messageProfileId, setMessageProfileId] = useState<number | null>(null);
   const [matchOpen, setMatchOpen] = useState(false);
   const [notice, setNotice] = useState<Notice | null>(null);
   const [exitDirection, setExitDirection] = useState<-1 | 1>(-1);
@@ -240,6 +261,13 @@ export function DiscoverApp() {
     ? filteredProfiles[profileIndex % filteredProfiles.length]
     : null;
 
+  const matchedProfiles = profiles.filter((profile) =>
+    matchedIds.includes(profile.id),
+  );
+
+  const messageProfile =
+    profiles.find((profile) => profile.id === messageProfileId) ?? null;
+
   function completeTutorial() {
     window.localStorage.setItem(
       "yuno_discover_tutorial_seen",
@@ -261,6 +289,16 @@ export function DiscoverApp() {
     setProfileIndex((index) => (index + 1) % filteredProfiles.length);
   }
 
+  function registerCurrentMatch() {
+    if (!currentProfile) return;
+
+    setMatchedIds((ids) =>
+      ids.includes(currentProfile.id)
+        ? ids
+        : [...ids, currentProfile.id],
+    );
+  }
+
   function toggleSave() {
     if (!currentProfile) return;
 
@@ -276,7 +314,10 @@ export function DiscoverApp() {
     <AppShell
       activeNav={activeNav}
       onNavigate={setActiveNav}
-      context={<AppContextPanel />}
+      matchCount={matchedProfiles.length}
+      context={
+        activeNav === "discover" ? <AppContextPanel /> : undefined
+      }
       overlays={
         <>
           <AnimatePresence>
@@ -306,7 +347,12 @@ export function DiscoverApp() {
               <MatchCelebration
                 name={currentProfile.name}
                 image={currentProfile.image}
-                onClose={() => {
+                onMessage={() => {
+                  setMessageProfileId(currentProfile.id);
+                  setMatchOpen(false);
+                  setActiveNav("messages");
+                }}
+                onKeepDiscovering={() => {
                   setMatchOpen(false);
                   moveNext(
                     {
@@ -328,6 +374,27 @@ export function DiscoverApp() {
         </>
       }
     >
+      {activeNav === "matches" ? (
+        <MatchesView
+          matches={matchedProfiles}
+          onDiscover={() => setActiveNav("discover")}
+          onMessage={(profile) => {
+            setMessageProfileId(profile.id);
+            setActiveNav("messages");
+          }}
+          onRemove={(profileId) => {
+            setMatchedIds((ids) =>
+              ids.filter((id) => id !== profileId),
+            );
+          }}
+        />
+      ) : activeNav === "messages" && messageProfile ? (
+        <ConversationView
+          profile={messageProfile}
+          onBack={() => setActiveNav("matches")}
+        />
+      ) : (
+        <>
         <div className="discovery-main__header">
           <div>
             <span className="app-kicker">{t("discover.header.kicker")}</span>
@@ -409,9 +476,9 @@ export function DiscoverApp() {
                       ? { opacity: 0 }
                       : {
                           opacity: 0,
-                          x: exitDirection * 64,
-                          rotate: exitDirection * 1.5,
-                          scale: 0.97,
+                          x: exitDirection * 520,
+                          rotate: exitDirection * 7,
+                          scale: 0.96,
                         }
                   }
                   transition={{
@@ -423,11 +490,32 @@ export function DiscoverApp() {
                     mode="discover"
                     draggable
                     saved={savedIds.includes(currentProfile.id)}
-                    onSkip={() =>
-                      moveNext({ key: "discover.notices.skipped" }, -1)
-                    }
-                    onSave={toggleSave}
-                    onConnect={() => setMatchOpen(true)}
+                    onSkip={() => {
+                      void playYunoSound("skip");
+                      moveNext(
+                        { key: "discover.notices.skipped" },
+                        -1,
+                      );
+                    }}
+                    onSave={() => {
+                      void playYunoSound("save");
+                      toggleSave();
+                    }}
+                    onConnect={(source = "button") => {
+                      void playYunoSound("connect");
+                      registerCurrentMatch();
+
+                      const celebrationDelay =
+                        source === "swipe" ? 220 : 0;
+
+                      window.setTimeout(() => {
+                        setMatchOpen(true);
+
+                        window.setTimeout(() => {
+                          void playYunoSound("match");
+                        }, 180);
+                      }, celebrationDelay);
+                    }}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -491,6 +579,8 @@ export function DiscoverApp() {
             </span>
           </div>
         )}
+        </>
+      )}
     </AppShell>
   );
 }
