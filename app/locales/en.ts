@@ -89,10 +89,10 @@ export const en = {
   homepage: {
     hero: {
       eyebrow: "A new way to grow, together",
-      support: "Everyone knows something worth sharing. Meet curious people, exchange real skills, and turn your time into new possibilities.",
+      support: "Everyone knows something worth sharing. Teach a skill, earn Skill Hours, then use that time to learn what you want from someone else.",
       primaryCta: "Start matching",
       secondaryCta: "See how YUNO works",
-      socialProof: "curious people already sharing",
+      socialProof: "Real people. Real skills. Endless possibilities.",
       visualLabel: "YUNO member discovery preview",
       greatMatch: "Great match",
       matchReason: "You both love design",
@@ -108,7 +108,7 @@ export const en = {
     how: {
       eyebrow: "One simple loop",
       title: "Learn more by sharing what’s already yours.",
-      copy: "No awkward direct swaps. Your time becomes a universal learning currency.",
+      copy: "No awkward direct swaps. Teach one person, earn time, and use it to learn from someone else.",
       steps: {
         teach: { title: "Teach", copy: "Share a skill you know well." },
         earn: { title: "Earn", copy: "Get one Skill Hour per hour." },

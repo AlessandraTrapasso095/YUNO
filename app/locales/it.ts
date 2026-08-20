@@ -95,10 +95,10 @@ export const it: DictionaryShape<TranslationDictionary> = {
   homepage: {
     hero: {
       eyebrow: "Un nuovo modo di crescere, insieme",
-      support: "Tutti sanno qualcosa che vale la pena condividere. Incontra persone curiose, scambia competenze reali e trasforma il tuo tempo in nuove possibilità.",
+      support: "Tutti sanno qualcosa che vale la pena condividere. Insegna una competenza, ottieni Skill Hours e usa quel tempo per imparare ciò che vuoi da qualcun altro.",
       primaryCta: "Inizia a scoprire",
       secondaryCta: "Scopri come funziona YUNO",
-      socialProof: "persone curiose stanno già condividendo",
+      socialProof: "Persone vere. Competenze vere. Possibilità infinite.",
       visualLabel: "Anteprima della scoperta di membri YUNO",
       greatMatch: "Ottimo match",
       matchReason: "Amate entrambi il design",
@@ -114,10 +114,10 @@ export const it: DictionaryShape<TranslationDictionary> = {
     how: {
       eyebrow: "Un ciclo semplice",
       title: "Impara di più condividendo ciò che sai già.",
-      copy: "Nessuno scambio diretto obbligatorio. Il tuo tempo diventa una moneta universale per imparare.",
+      copy: "Nessuno scambio diretto obbligatorio. Insegna a una persona, ottieni tempo e usalo per imparare da qualcun altro.",
       steps: {
         teach: { title: "Insegna", copy: "Condividi una competenza che conosci bene." },
-        earn: { title: "Guadagna", copy: "Ottieni una Skill Hour per ogni ora." },
+        earn: { title: "Ottieni", copy: "Ricevi una Skill Hour per ogni ora che insegni." },
         learn: { title: "Impara", copy: "Usala con qualsiasi membro." },
         repeat: { title: "Ripeti", copy: "Continua a coltivare la curiosità." },
       },

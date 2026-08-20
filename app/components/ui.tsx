@@ -247,7 +247,7 @@ export function AvatarStack() {
       <div className="avatar-stack" aria-hidden="true">
         {people.map((person) => <Image key={person} src={person} alt="" width={72} height={72} />)}
       </div>
-      <p><strong>8,000+</strong> {t("homepage.hero.socialProof")}</p>
+      <p>{t("homepage.hero.socialProof")}</p>
     </div>
   );
 }

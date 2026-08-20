@@ -249,7 +249,7 @@ export function HomePage() {
             <h2>{t("homepage.discovery.title")}</h2>
             <p>{t("homepage.discovery.copy")}</p>
             <div className="discovery-points">
-              <span><strong>96%</strong> {t("homepage.discovery.compatibility")}</span>
+              <span><strong>{profiles[0].match}%</strong> {t("homepage.discovery.compatibility")}</span>
               <span><strong>3</strong> {t("homepage.discovery.wantedSkills")}</span>
               <span><strong>2 km</strong> {t("homepage.discovery.distance")}</span>
             </div>
