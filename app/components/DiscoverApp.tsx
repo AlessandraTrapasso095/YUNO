@@ -32,8 +32,10 @@ import { AppContextPanel } from "./AppContextPanel";
 import { AppShell } from "./AppShell";
 import { ProfileCard } from "./ProfileCard";
 import { playYunoSound } from "../lib/sound";
+import { useMessagesStore } from "../lib/messages-store";
 import { MatchesView } from "./MatchesView";
 import { ConversationView } from "./ConversationView";
+import { MessagesView } from "./MessagesView";
 import { ProfileView } from "./ProfileView";
 import { SkillHoursView } from "./SkillHoursView";
 import { DiscoverTutorial } from "./DiscoverTutorial";
@@ -80,6 +82,7 @@ function MatchCelebration({
   onKeepDiscovering: () => void;
 }) {
   const reduceMotion = useReducedMotion();
+
   const { t } = useI18n();
   return (
     <Modal
@@ -201,6 +204,7 @@ function getTutorialServerSnapshot() {
 export function DiscoverApp() {
   const { t } = useI18n();
   const reduceMotion = useReducedMotion();
+  const messageStore = useMessagesStore();
   const [activeNav, setActiveNav] = useState<AppNavId>("discover");
   const storedProfile = useSyncExternalStore(
     subscribeToProfileStorage,
@@ -350,6 +354,28 @@ export function DiscoverApp() {
   const messageProfile =
     profiles.find((profile) => profile.id === messageProfileId) ?? null;
 
+  function simulateIncomingMessage(profileId: number) {
+    const profile = profiles.find((item) => item.id === profileId);
+
+    if (!profile) return;
+
+    const isOpenConversation =
+      activeNav === "messages" &&
+      messageProfileId === profileId;
+
+    messageStore.receiveMessage(
+      profileId,
+      t("messages.demoOutsideReply", {
+        name: profile.name,
+      }),
+      !isOpenConversation,
+    );
+
+    if (!isOpenConversation) {
+      void playYunoSound("messageReceived");
+    }
+  }
+
   function completeTutorial() {
     try {
       window.localStorage.setItem(
@@ -383,6 +409,8 @@ export function DiscoverApp() {
         ? ids
         : [...ids, currentProfile.id],
     );
+
+    messageStore.ensureConversation(currentProfile.id);
   }
 
   function toggleSave() {
@@ -401,6 +429,7 @@ export function DiscoverApp() {
       activeNav={activeNav}
       onNavigate={setActiveNav}
       matchCount={matchedProfiles.length}
+      unreadMessageCount={messageStore.unreadCount}
       userProfile={userProfile}
       context={
         activeNav === "discover" ? (
@@ -472,6 +501,8 @@ export function DiscoverApp() {
           matches={matchedProfiles}
           onDiscover={() => setActiveNav("discover")}
           onMessage={(profile) => {
+            messageStore.ensureConversation(profile.id);
+            messageStore.markConversationRead(profile.id);
             setMessageProfileId(profile.id);
             setActiveNav("messages");
           }}
@@ -484,7 +515,42 @@ export function DiscoverApp() {
       ) : activeNav === "messages" && messageProfile ? (
         <ConversationView
           profile={messageProfile}
-          onBack={() => setActiveNav("matches")}
+          messages={messageStore.getConversationMessages(
+            messageProfile.id,
+          )}
+          onBack={() => setMessageProfileId(null)}
+          onSend={(text) =>
+            messageStore.sendMessage(
+              messageProfile.id,
+              text,
+            )
+          }
+          onReceive={(text) =>
+            messageStore.receiveMessage(
+              messageProfile.id,
+              text,
+              false,
+            )
+          }
+          onMarkRead={() =>
+            messageStore.markConversationRead(
+              messageProfile.id,
+            )
+          }
+          onMarkMessageRead={
+            messageStore.markMessageRead
+          }
+        />
+      ) : activeNav === "messages" ? (
+        <MessagesView
+          profiles={profiles}
+          conversations={messageStore.conversations}
+          messages={messageStore.messages}
+          onOpenConversation={(profile) => {
+            messageStore.markConversationRead(profile.id);
+            setMessageProfileId(profile.id);
+          }}
+          onDiscover={() => setActiveNav("discover")}
         />
       ) : activeNav === "profile" ? (
         <ProfileView

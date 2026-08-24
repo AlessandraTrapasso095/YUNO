@@ -47,12 +47,39 @@ export const en = {
     viewProfile: "View profile",
   },
   messages: {
+    inbox: {
+      kicker: "YOUR CONVERSATIONS",
+      title: "Messages",
+      copy: "Talk with your matches, get to know each other, and turn a connection into something worth learning.",
+      search: "Search conversations...",
+      online: "Online",
+      now: "Now",
+      demoTime: "Yesterday",
+      newMatchMessage: "You matched. Start the conversation!",
+      youPrefix: "You: ",
+
+      demoMessage: "Want to talk about {skill}?",
+      unread: "{count} unread message",
+      emptyKicker: "NO MESSAGES YET",
+      emptyTitle: "First the match. Then the conversation.",
+      emptyCopy: "When you match with someone, your conversation will appear here.",
+      emptyAction: "Discover people",
+      noResultsTitle: "No conversations found",
+      noResultsCopy: "Try searching for another name or skill.",
+      simulateIncoming: "Simulate incoming message",
+
+    },
     back: "Back",
     matchConnection: "YUNO match",
     introTitle: "You and {name} matched!",
     introCopy: "Start with a hello and discover what you can learn from each other.",
     placeholder: "Write a message...",
     send: "Send message",
+    online: "Online",
+    demoReply: "Absolutely! I’d love to 😊 Where would you like to start?",
+    demoOutsideReply: "Hi! Want to plan a session together?",
+
+
   },
   matches: {
     kicker: "YOUR CONNECTIONS",

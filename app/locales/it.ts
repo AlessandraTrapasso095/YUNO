@@ -53,12 +53,39 @@ export const it: DictionaryShape<TranslationDictionary> = {
     viewProfile: "Vedi profilo",
   },
   messages: {
+    inbox: {
+      kicker: "LE TUE CONVERSAZIONI",
+      title: "Messaggi",
+      copy: "Parla con i tuoi match, conoscetevi e trasformate una connessione in qualcosa da imparare.",
+      search: "Cerca una conversazione...",
+      online: "Online",
+      now: "Ora",
+      demoTime: "Ieri",
+      newMatchMessage: "Avete fatto match. Inizia la conversazione!",
+      youPrefix: "Tu: ",
+
+      demoMessage: "Parliamo di {skill}?",
+      unread: "{count} messaggio non letto",
+      emptyKicker: "NESSUN MESSAGGIO",
+      emptyTitle: "Prima il match. Poi inizia la conversazione.",
+      emptyCopy: "Quando fai match con qualcuno, la vostra conversazione comparirà qui.",
+      emptyAction: "Scopri persone",
+      noResultsTitle: "Nessuna conversazione trovata",
+      noResultsCopy: "Prova a cercare un altro nome o una competenza.",
+      simulateIncoming: "Simula messaggio ricevuto",
+
+    },
     back: "Indietro",
     matchConnection: "Match YUNO",
     introTitle: "Tu e {name} avete fatto match!",
     introCopy: "Inizia con un saluto e scopri cosa potete imparare l'una dall'altra.",
     placeholder: "Scrivi un messaggio...",
     send: "Invia messaggio",
+    online: "Online",
+    demoReply: "Certo! Mi fa piacere 😊 Da dove vuoi iniziare?",
+    demoOutsideReply: "Ciao! Ti va di organizzare una sessione insieme?",
+
+
   },
   matches: {
     kicker: "LE TUE CONNESSIONI",

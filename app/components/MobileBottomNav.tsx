@@ -10,12 +10,14 @@ type MobileBottomNavProps = {
   activeNav: AppNavId;
   onNavigate: (id: AppNavId) => void;
   matchCount?: number;
+  unreadMessageCount?: number;
 };
 
 export function MobileBottomNav({
   activeNav,
   onNavigate,
   matchCount = 0,
+  unreadMessageCount = 0,
 }: MobileBottomNavProps) {
   const { t } = useI18n();
 
@@ -35,6 +37,8 @@ export function MobileBottomNav({
             <Icon size={22} />
             {id === "matches" && matchCount > 0 ? (
               <em>{matchCount}</em>
+            ) : id === "messages" && unreadMessageCount > 0 ? (
+              <em>{unreadMessageCount}</em>
             ) : (
               badge && <em />
             )}

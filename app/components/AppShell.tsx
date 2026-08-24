@@ -11,6 +11,7 @@ type AppShellProps = {
   activeNav: AppNavId;
   onNavigate: (id: AppNavId) => void;
   matchCount?: number;
+  unreadMessageCount?: number;
   userProfile: CurrentUserProfile;
   children: ReactNode;
   context?: ReactNode;
@@ -21,6 +22,7 @@ export function AppShell({
   activeNav,
   onNavigate,
   matchCount = 0,
+  unreadMessageCount = 0,
   userProfile,
   children,
   context,
@@ -36,6 +38,7 @@ export function AppShell({
         activeNav={activeNav}
         onNavigate={onNavigate}
         matchCount={matchCount}
+        unreadMessageCount={unreadMessageCount}
         userProfile={userProfile}
       />
 
@@ -53,6 +56,7 @@ export function AppShell({
         activeNav={activeNav}
         onNavigate={onNavigate}
         matchCount={matchCount}
+        unreadMessageCount={unreadMessageCount}
       />
 
       {overlays}

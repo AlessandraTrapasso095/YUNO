@@ -11,6 +11,7 @@ type AppSidebarProps = {
   activeNav: AppNavId;
   onNavigate: (id: AppNavId) => void;
   matchCount?: number;
+  unreadMessageCount?: number;
   userProfile: CurrentUserProfile;
 };
 
@@ -18,6 +19,7 @@ export function AppSidebar({
   activeNav,
   onNavigate,
   matchCount = 0,
+  unreadMessageCount = 0,
   userProfile,
 }: AppSidebarProps) {
   const { t } = useI18n();
@@ -40,6 +42,8 @@ export function AppSidebar({
             <span>{t(labelKey)}</span>
             {id === "matches" && matchCount > 0 ? (
               <em>{matchCount}</em>
+            ) : id === "messages" && unreadMessageCount > 0 ? (
+              <em>{unreadMessageCount}</em>
             ) : (
               badge && <em>{badge}</em>
             )}

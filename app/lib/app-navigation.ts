@@ -34,7 +34,7 @@ type MobileAppNavItem = {
 export const appNavItems: readonly AppNavItem[] = [
   { id: "discover", labelKey: "navigation.discover", icon: Compass },
   { id: "matches", labelKey: "navigation.matches", icon: Heart },
-  { id: "messages", labelKey: "navigation.messages", icon: MessageCircle, badge: "2" },
+  { id: "messages", labelKey: "navigation.messages", icon: MessageCircle },
   { id: "sessions", labelKey: "navigation.sessions", icon: CalendarDays },
   { id: "skillHours", labelKey: "navigation.skillHours", icon: WalletCards },
   { id: "profile", labelKey: "navigation.profile", icon: UserRound },
@@ -44,6 +44,6 @@ export const mobileAppNavItems: readonly MobileAppNavItem[] = [
   { id: "discover", labelKey: "navigation.discover", icon: Compass },
   { id: "matches", labelKey: "navigation.matches", icon: Heart },
   { id: "sessions", labelKey: "navigation.sessions", icon: CalendarDays },
-  { id: "messages", labelKey: "navigation.chat", icon: MessageCircle, badge: true },
+  { id: "messages", labelKey: "navigation.chat", icon: MessageCircle },
   { id: "profile", labelKey: "navigation.profile", icon: UserRound },
 ];
