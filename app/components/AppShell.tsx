@@ -27,7 +27,11 @@ export function AppShell({
   overlays,
 }: AppShellProps) {
   return (
-    <main className="discover-app">
+    <main
+      className={`discover-app ${
+        activeNav === "skillHours" ? "discover-app--skill-hours" : ""
+      }`}
+    >
       <AppSidebar
         activeNav={activeNav}
         onNavigate={onNavigate}
@@ -36,7 +40,10 @@ export function AppShell({
       />
 
       <section className="discovery-main">
-        <MobileAppHeader />
+        <MobileAppHeader
+          skillHours={userProfile.skillHours}
+          onNavigate={onNavigate}
+        />
         {children}
       </section>
 

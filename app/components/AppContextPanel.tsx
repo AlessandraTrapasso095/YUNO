@@ -6,10 +6,19 @@ import {
   Clock3,
   Sparkles,
 } from "lucide-react";
+import type { AppNavId } from "../lib/app-navigation";
 import { useI18n } from "../i18n/I18nProvider";
 import { SkillTag } from "./ui";
 
-export function AppContextPanel() {
+type AppContextPanelProps = {
+  skillHours: number;
+  onNavigate: (id: AppNavId) => void;
+};
+
+export function AppContextPanel({
+  skillHours,
+  onNavigate,
+}: AppContextPanelProps) {
   const { t } = useI18n();
 
   return (
@@ -34,7 +43,7 @@ export function AppContextPanel() {
         </div>
 
         <div className="balance-card__amount">
-          <strong>4.5</strong>
+          <strong>{skillHours.toFixed(1)}</strong>
           <span>SH</span>
         </div>
 
@@ -44,7 +53,10 @@ export function AppContextPanel() {
 
         <p>{t("discover.context.balanceCopy")}</p>
 
-        <button type="button">
+        <button
+          type="button"
+          onClick={() => onNavigate("skillHours")}
+        >
           {t("discover.context.viewActivity")} <span>→</span>
         </button>
       </section>

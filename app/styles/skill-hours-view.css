@@ -1,0 +1,1250 @@
+.skill-hours-view {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: 8px 0 36px;
+}
+
+.skill-hours-view__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.skill-hours-view__header h1 {
+  margin: 5px 0 6px;
+  color: #111936;
+  font-size: 32px;
+  letter-spacing: -0.04em;
+}
+
+.skill-hours-view__header p {
+  max-width: 640px;
+  margin: 0;
+  color: #69718a;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.skill-hours-balance-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.skill-hours-balance-card {
+  display: flex;
+  min-height: 150px;
+  padding: 20px;
+  align-items: flex-start;
+  gap: 14px;
+  border: 1px solid rgba(17, 25, 54, 0.07);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 14px 36px rgba(17, 25, 54, 0.045);
+}
+
+.skill-hours-balance-card__icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 15px;
+  place-items: center;
+}
+
+.skill-hours-balance-card--available {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(121,87,255,.13), transparent 34%),
+    linear-gradient(135deg, #ffffff, #faf9ff);
+}
+
+.skill-hours-balance-card--available .skill-hours-balance-card__icon {
+  color: #ffffff;
+  background: linear-gradient(135deg, #168bff, #7957ff 56%, #f044b7);
+}
+
+.skill-hours-balance-card--held .skill-hours-balance-card__icon {
+  color: #7957ff;
+  background: #f0ecff;
+}
+
+.skill-hours-balance-card--earned .skill-hours-balance-card__icon {
+  color: #168bff;
+  background: #eaf5ff;
+}
+
+.skill-hours-balance-card span {
+  color: #69718a;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.skill-hours-balance-card strong {
+  display: block;
+  margin-top: 7px;
+  color: #111936;
+  font-size: 28px;
+  letter-spacing: -0.035em;
+}
+
+.skill-hours-balance-card strong small {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.skill-hours-balance-card p {
+  margin: 7px 0 0;
+  color: #8a92a8;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.skill-hours-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  gap: 18px;
+}
+
+.skill-hours-layout__main,
+.skill-hours-layout__side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skill-hours-panel,
+.skill-hours-plus-card,
+.skill-hours-how-card {
+  padding: 20px;
+  border: 1px solid rgba(17, 25, 54, 0.07);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 12px 34px rgba(17, 25, 54, 0.045);
+}
+
+.skill-hours-panel__heading {
+  display: flex;
+  margin-bottom: 16px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.skill-hours-panel__heading h2,
+.skill-hours-how-card h2 {
+  margin: 4px 0 0;
+  color: #111936;
+  font-size: 18px;
+  letter-spacing: -0.025em;
+}
+
+.skill-hours-panel__heading > button {
+  border: 0;
+  color: #7957ff;
+  background: transparent;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.skill-hours-transactions {
+  display: flex;
+  flex-direction: column;
+}
+
+.skill-hours-transaction {
+  display: grid;
+  min-height: 68px;
+  padding: 11px 0;
+  align-items: center;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 11px;
+  border-bottom: 1px solid rgba(17, 25, 54, 0.06);
+}
+
+.skill-hours-transaction:last-child {
+  border-bottom: 0;
+}
+
+.skill-hours-transaction__icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  place-items: center;
+}
+
+.skill-hours-transaction--welcome .skill-hours-transaction__icon {
+  color: #7957ff;
+  background: #f0ecff;
+}
+
+.skill-hours-transaction--earned .skill-hours-transaction__icon {
+  color: #168bff;
+  background: #eaf5ff;
+}
+
+.skill-hours-transaction--spent .skill-hours-transaction__icon {
+  color: #f044b7;
+  background: #ffeaf7;
+}
+
+.skill-hours-transaction--purchased .skill-hours-transaction__icon {
+  color: #ff704d;
+  background: #fff0eb;
+}
+
+.skill-hours-transaction__copy strong {
+  display: block;
+  color: #111936;
+  font-size: 11px;
+}
+
+.skill-hours-transaction__copy span,
+.skill-hours-transaction__value span {
+  display: block;
+  margin-top: 3px;
+  color: #8a92a8;
+  font-size: 9px;
+}
+
+.skill-hours-transaction__value {
+  text-align: right;
+}
+
+.skill-hours-transaction__value strong {
+  color: #111936;
+  font-size: 11px;
+}
+
+.skill-hours-transaction--spent .skill-hours-transaction__value strong {
+  color: #f044b7;
+}
+
+.skill-hours-earn-card {
+  display: grid;
+  padding: 16px;
+  align-items: center;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 13px;
+  border: 1px solid rgba(22, 139, 255, 0.12);
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f8fcff, #f7f5ff);
+}
+
+.skill-hours-earn-card__icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #168bff, #7957ff);
+  place-items: center;
+}
+
+.skill-hours-earn-card strong {
+  color: #111936;
+  font-size: 12px;
+}
+
+.skill-hours-earn-card p {
+  margin: 4px 0 0;
+  color: #69718a;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.skill-hours-earn-card > button {
+  display: inline-flex;
+  min-height: 38px;
+  padding: 0 12px;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 12px;
+  color: #ffffff;
+  background: #111936;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.skill-hours-packages {
+  display: grid;
+  margin-top: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.skill-hours-package {
+  position: relative;
+  display: flex;
+  min-height: 215px;
+  padding: 17px;
+  border: 1px solid rgba(17, 25, 54, 0.07);
+  border-radius: 18px;
+  background: #fafbff;
+  flex-direction: column;
+}
+
+.skill-hours-package.is-popular {
+  border-color: rgba(121, 87, 255, 0.3);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(240,68,183,.09), transparent 35%),
+    #faf9ff;
+  box-shadow: 0 12px 28px rgba(121, 87, 255, 0.09);
+}
+
+.skill-hours-package__popular {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  display: inline-flex;
+  min-height: 23px;
+  padding: 0 9px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 999px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #7957ff, #f044b7);
+  font-size: 8px;
+  font-weight: 800;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.skill-hours-package__hours {
+  color: #111936;
+  font-size: 28px;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+}
+
+.skill-hours-package__hours small {
+  font-size: 11px;
+}
+
+.skill-hours-package > strong {
+  margin-top: 3px;
+  color: #7957ff;
+  font-size: 16px;
+}
+
+.skill-hours-package > p {
+  margin: 8px 0 14px;
+  color: #69718a;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.skill-hours-package > button {
+  min-height: 36px;
+  margin-top: auto;
+  border: 1px solid rgba(121,87,255,.14);
+  border-radius: 11px;
+  color: #634dcc;
+  background: #f0ecff;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.skill-hours-plus-card {
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(240,68,183,.28), transparent 34%),
+    linear-gradient(145deg, #111936 0%, #25245b 55%, #553b9d 100%);
+}
+
+.skill-hours-plus-card__top > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.skill-hours-plus-card__top > strong {
+  display: block;
+  margin-top: 15px;
+  font-size: 30px;
+  letter-spacing: -0.04em;
+}
+
+.skill-hours-plus-card__top > small {
+  color: rgba(255,255,255,.64);
+  font-size: 9px;
+}
+
+.skill-hours-plus-card__reward {
+  display: grid;
+  margin-top: 16px;
+  padding: 13px;
+  align-items: center;
+  grid-template-columns: 34px auto 1fr;
+  gap: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  background: rgba(255,255,255,.08);
+}
+
+.skill-hours-plus-card__reward strong {
+  font-size: 17px;
+}
+
+.skill-hours-plus-card__reward span {
+  color: rgba(255,255,255,.64);
+  font-size: 8px;
+}
+
+.skill-hours-plus-card ul {
+  display: flex;
+  padding: 0;
+  margin: 16px 0;
+  list-style: none;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.skill-hours-plus-card li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,.84);
+  font-size: 9px;
+}
+
+.skill-hours-plus-card > button {
+  width: 100%;
+  min-height: 40px;
+  border: 0;
+  border-radius: 12px;
+  color: #111936;
+  background: #ffffff;
+  font-size: 9px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.skill-hours-plus-card > p {
+  margin: 9px 0 0;
+  color: rgba(255,255,255,.52);
+  font-size: 8px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.skill-hours-how-card__icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 13px;
+  border-radius: 13px;
+  color: #7957ff;
+  background: #f0ecff;
+  place-items: center;
+}
+
+.skill-hours-how-card > div {
+  display: flex;
+  margin-top: 15px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skill-hours-how-card p {
+  display: flex;
+  margin: 0;
+  align-items: flex-start;
+  gap: 9px;
+  color: #7957ff;
+}
+
+.skill-hours-how-card p > span {
+  color: #69718a;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.skill-hours-how-card p strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #111936;
+  font-size: 10px;
+}
+
+.mobile-skill-hours-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .skill-hours-balance-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .skill-hours-balance-card--available {
+    grid-column: 1 / -1;
+  }
+
+  .skill-hours-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-hours-layout__side {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .skill-hours-view {
+    padding-top: 16px;
+    padding-bottom: 92px;
+  }
+
+  .skill-hours-view__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .skill-hours-view__header h1 {
+    font-size: 28px;
+  }
+
+  .skill-hours-balance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-hours-balance-card--available {
+    grid-column: auto;
+  }
+
+  .skill-hours-packages {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-hours-package {
+    min-height: 165px;
+  }
+
+  .skill-hours-layout__side {
+    display: flex;
+  }
+}
+
+@media (max-width: 520px) {
+  .skill-hours-view__header .skill-hour-badge {
+    display: none;
+  }
+
+  .skill-hours-panel,
+  .skill-hours-plus-card,
+  .skill-hours-how-card {
+    padding: 16px;
+  }
+
+  .skill-hours-earn-card {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .skill-hours-earn-card > button {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+
+  .skill-hours-transaction {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .skill-hours-transaction__value {
+    grid-column: 2;
+    text-align: left;
+  }
+}
+
+/* =========================================================
+   PHASE 8 — SKILL HOURS APP LAYOUT
+   ========================================================= */
+
+.skill-hours-desktop-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  gap: 18px;
+  align-items: start;
+}
+
+.skill-hours-primary {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.skill-hours-balance-grid {
+  display: grid;
+  width: 100%;
+  margin: 0;
+  grid-template-columns: minmax(0, 1.35fr) minmax(240px, .7fr);
+  gap: 14px;
+}
+
+.skill-hours-main-row {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1.35fr) minmax(240px, .7fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.skill-hours-layout__side {
+  display: flex;
+  width: 310px;
+  min-width: 310px;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skill-hours-balance-card--available,
+.skill-hours-balance-card--held,
+.skill-hours-get-more,
+.skill-hours-plus-card,
+.skill-hours-how-card,
+.skill-hours-activity {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+.skill-hours-main-row .skill-hours-plus-card {
+  height: 100%;
+  min-height: 0;
+}
+
+.skill-hours-activity .skill-hours-transaction {
+  grid-template-columns: 36px minmax(0, 1fr);
+  align-items: start;
+}
+
+.skill-hours-activity .skill-hours-transaction__value {
+  grid-column: 2;
+  margin-top: -2px;
+  text-align: left;
+}
+
+/* Mobile header */
+.mobile-app-header .mobile-skill-hours-link {
+  display: block;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.mobile-app-header .mobile-skill-hours-link .skill-hour-badge {
+  white-space: nowrap;
+}
+
+/* Tablet / mobile */
+@media (max-width: 900px) {
+  .skill-hours-view {
+    width: 100%;
+    max-width: 100%;
+    padding-top: 16px;
+    padding-bottom: 92px;
+  }
+
+  .skill-hours-view__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .skill-hours-view__header h1 {
+    font-size: 28px;
+  }
+
+  .skill-hours-desktop-grid {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .skill-hours-primary {
+    display: contents;
+  }
+
+  .skill-hours-balance-grid {
+    display: contents;
+  }
+
+  .skill-hours-main-row {
+    display: contents;
+  }
+
+  .skill-hours-layout__side {
+    display: contents;
+  }
+
+  .skill-hours-balance-card--available {
+    order: 1;
+  }
+
+  .skill-hours-balance-card--held {
+    order: 2;
+  }
+
+  .skill-hours-get-more {
+    order: 3;
+  }
+
+  .skill-hours-plus-card {
+    order: 4;
+  }
+
+  .skill-hours-activity {
+    order: 5;
+  }
+
+  .skill-hours-how-card {
+    order: 6;
+  }
+
+  .skill-hours-balance-card,
+  .skill-hours-get-more,
+  .skill-hours-plus-card,
+  .skill-hours-activity,
+  .skill-hours-how-card {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .skill-hours-packages {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-hours-package {
+    min-height: 165px;
+  }
+
+  .mobile-app-header > div {
+    gap: 6px;
+  }
+
+  .mobile-app-header > div > button:not(.mobile-skill-hours-link) {
+    width: 37px;
+    height: 37px;
+  }
+
+  .mobile-app-header .mobile-skill-hours-link {
+    width: auto;
+    height: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .skill-hours-view__header .skill-hour-badge {
+    display: none;
+  }
+
+  .skill-hours-panel,
+  .skill-hours-plus-card,
+  .skill-hours-how-card {
+    padding: 16px;
+  }
+
+  .skill-hours-earn-card {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .skill-hours-earn-card > button {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+
+  .skill-hours-transaction {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .skill-hours-transaction__value {
+    grid-column: 2;
+    text-align: left;
+  }
+}
+
+@media (max-width: 410px) {
+  .mobile-app-header {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .mobile-app-header .brand-logo {
+    width: 98px;
+  }
+
+  .mobile-app-header > div {
+    gap: 4px;
+  }
+
+  .mobile-app-header .skill-hour-badge {
+    font-size: 9px;
+  }
+
+  .mobile-app-header .skill-hour-badge__icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mobile-app-header > div > button:not(.mobile-skill-hours-link) {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (min-width: 901px) {
+  .discover-app--skill-hours {
+    grid-template-columns: 232px minmax(0, 1fr);
+  }
+
+  .discover-app--skill-hours .discovery-main {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .discover-app--skill-hours .skill-hours-view {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.skill-hours-modal {
+  position: relative;
+  padding: 28px;
+  border: 1px solid rgba(230, 233, 242, 0.9);
+  border-radius: 24px;
+  background: #ffffff;
+}
+
+.skill-hours-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  color: var(--navy);
+  background: #ffffff;
+  cursor: pointer;
+  place-items: center;
+}
+
+.skill-hours-modal__icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #168bff, #7957ff, #f044b7);
+  place-items: center;
+}
+
+.skill-hours-modal h2 {
+  margin: 7px 42px 16px 0;
+  color: var(--navy);
+  font-size: 26px;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.skill-hours-modal > p {
+  margin: 15px 0;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.skill-hours-modal__purchase {
+  display: flex;
+  min-height: 84px;
+  padding: 16px 18px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ded8ff;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #faf9ff, #f5f2ff);
+}
+
+.skill-hours-modal__purchase strong {
+  color: var(--navy);
+  font-size: 28px;
+  letter-spacing: -0.04em;
+}
+
+.skill-hours-modal__purchase span {
+  color: var(--violet);
+  font-size: 22px;
+  font-weight: 850;
+}
+
+.skill-hours-modal__notice {
+  display: flex;
+  margin: 16px 0;
+  padding: 12px 13px;
+  align-items: flex-start;
+  gap: 9px;
+  border: 1px solid #dcecff;
+  border-radius: 14px;
+  color: #41637f;
+  background: #f5faff;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.skill-hours-modal__notice svg {
+  flex: 0 0 auto;
+  color: var(--blue);
+}
+
+.skill-hours-modal__primary,
+.skill-hours-modal__secondary {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 13px;
+  font-size: 10px;
+  font-weight: 820;
+}
+
+.skill-hours-modal__primary {
+  border: 0;
+  color: #ffffff;
+  background: var(--navy);
+}
+
+.skill-hours-modal__primary:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.skill-hours-modal__secondary {
+  margin-top: 8px;
+  border: 0;
+  color: var(--violet);
+  background: transparent;
+  cursor: pointer;
+}
+
+.skill-hours-modal--plus {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(240, 68, 183, 0.28), transparent 35%),
+    linear-gradient(145deg, #111936 0%, #25245b 55%, #553b9d 100%);
+}
+
+.skill-hours-modal--plus .skill-hours-modal__close {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.skill-hours-modal__plus-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+.skill-hours-modal--plus h2 {
+  color: #ffffff;
+}
+
+.skill-hours-modal__plus-price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.skill-hours-modal__plus-price strong {
+  font-size: 34px;
+  letter-spacing: -0.05em;
+}
+
+.skill-hours-modal__plus-price span {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 10px;
+}
+
+.skill-hours-modal__plus-hours {
+  display: grid;
+  margin-top: 18px;
+  padding: 14px;
+  align-items: center;
+  grid-template-columns: 32px auto 1fr;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.skill-hours-modal__plus-hours strong {
+  font-size: 19px;
+}
+
+.skill-hours-modal__plus-hours span {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 9px;
+}
+
+.skill-hours-modal__benefits {
+  display: flex;
+  padding: 0;
+  margin: 18px 0;
+  list-style: none;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skill-hours-modal__benefits li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 10px;
+}
+
+.skill-hours-modal__benefits svg {
+  color: #d9cbff;
+}
+
+.skill-hours-modal--plus .skill-hours-modal__notice {
+  color: rgba(255, 255, 255, 0.72);
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.skill-hours-modal--plus .skill-hours-modal__notice svg {
+  color: #d9cbff;
+}
+
+.skill-hours-modal--plus .skill-hours-modal__primary {
+  color: var(--navy);
+  background: #ffffff;
+}
+
+.skill-hours-modal--plus .skill-hours-modal__secondary {
+  color: #ffffff;
+}
+
+@media (max-width: 520px) {
+  .skill-hours-modal {
+    padding: 22px 18px 18px;
+    border-radius: 21px;
+  }
+
+  .skill-hours-modal h2 {
+    font-size: 23px;
+  }
+}
+
+.skill-hours-modal--plus {
+  width: min(720px, 100%);
+}
+
+.skill-hours-modal__plus-intro {
+  display: flex;
+  margin-top: 14px;
+  padding: 11px 13px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 13px;
+  color: rgba(255,255,255,.88);
+  background: rgba(255,255,255,.07);
+  font-size: 10px;
+  font-weight: 760;
+}
+
+.skill-hours-modal__plus-intro svg {
+  color: #d9cbff;
+}
+
+.skill-hours-modal__features-title {
+  margin: 20px 0 12px;
+  color: #ffffff;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+}
+
+.skill-hours-modal__feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.skill-hours-modal__feature-grid article {
+  display: flex;
+  min-height: 86px;
+  padding: 12px;
+  align-items: flex-start;
+  gap: 9px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  background: rgba(255,255,255,.055);
+}
+
+.skill-hours-modal__feature-grid article > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: #d9cbff;
+}
+
+.skill-hours-modal__feature-grid strong {
+  display: block;
+  color: #ffffff;
+  font-size: 10px;
+}
+
+.skill-hours-modal__feature-grid span {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255,255,255,.6);
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.skill-hours-modal__more {
+  margin: 12px 0 0 !important;
+  color: rgba(255,255,255,.5) !important;
+  font-size: 8px !important;
+  text-align: center;
+}
+
+@media (max-width: 620px) {
+  .skill-hours-modal__feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.skill-hours-modal--activity {
+  width: min(620px, 100%);
+}
+
+.skill-hours-modal--activity > p {
+  margin-bottom: 16px;
+}
+
+.skill-hours-activity-filters {
+  display: flex;
+  margin-bottom: 14px;
+  gap: 7px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.skill-hours-activity-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.skill-hours-activity-filters button {
+  min-height: 32px;
+  padding: 0 11px;
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--color-text-secondary);
+  background: #ffffff;
+  font-size: 9px;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+.skill-hours-activity-filters button.is-active {
+  color: #ffffff;
+  border-color: transparent;
+  background: linear-gradient(135deg, #168bff, #7957ff);
+}
+
+.skill-hours-modal-transactions {
+  max-height: min(420px, 48vh);
+  padding-right: 4px;
+  overflow-y: auto;
+}
+
+.skill-hours-modal-transactions .skill-hours-transaction {
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+}
+
+.skill-hours-activity-empty {
+  display: flex;
+  min-height: 180px;
+  padding: 24px;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #ded8ff;
+  border-radius: 18px;
+  color: var(--violet);
+  background: #faf9ff;
+  text-align: center;
+  flex-direction: column;
+}
+
+.skill-hours-activity-empty strong {
+  margin-top: 9px;
+  color: var(--navy);
+  font-size: 12px;
+}
+
+.skill-hours-activity-empty span {
+  max-width: 280px;
+  margin-top: 4px;
+  color: var(--color-text-secondary);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.skill-hours-transaction--held .skill-hours-transaction__icon {
+  color: #7957ff;
+  background: #f0ecff;
+}
+
+.skill-hours-transaction--returned .skill-hours-transaction__icon {
+  color: #168bff;
+  background: #eaf5ff;
+}
+
+.skill-hours-transaction--subscription .skill-hours-transaction__icon {
+  color: #f044b7;
+  background: #ffeaf7;
+}
+
+@media (max-width: 520px) {
+  .skill-hours-modal-transactions .skill-hours-transaction {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .skill-hours-modal-transactions .skill-hours-transaction__value {
+    grid-column: 2;
+    text-align: left;
+  }
+}

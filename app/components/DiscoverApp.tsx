@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
@@ -35,6 +35,7 @@ import { playYunoSound } from "../lib/sound";
 import { MatchesView } from "./MatchesView";
 import { ConversationView } from "./ConversationView";
 import { ProfileView } from "./ProfileView";
+import { SkillHoursView } from "./SkillHoursView";
 import { DiscoverTutorial } from "./DiscoverTutorial";
 import {
   DiscoverFiltersModal,
@@ -156,52 +157,90 @@ function MatchCelebration({
   );
 }
 
+const PROFILE_STORAGE_KEY = "yuno_current_user_profile";
+const PROFILE_STORAGE_EVENT = "yuno-profile-storage-change";
+const TUTORIAL_STORAGE_KEY = "yuno_discover_tutorial_seen";
+const TUTORIAL_STORAGE_EVENT = "yuno-tutorial-storage-change";
+
+function subscribeToProfileStorage(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(PROFILE_STORAGE_EVENT, callback);
+
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(PROFILE_STORAGE_EVENT, callback);
+  };
+}
+
+function getProfileStorageSnapshot() {
+  return window.localStorage.getItem(PROFILE_STORAGE_KEY) ?? "";
+}
+
+function getProfileServerSnapshot() {
+  return "";
+}
+
+function subscribeToTutorialStorage(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(TUTORIAL_STORAGE_EVENT, callback);
+
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(TUTORIAL_STORAGE_EVENT, callback);
+  };
+}
+
+function getTutorialStorageSnapshot() {
+  return window.localStorage.getItem(TUTORIAL_STORAGE_KEY) ?? "";
+}
+
+function getTutorialServerSnapshot() {
+  return "true";
+}
+
 export function DiscoverApp() {
   const { t } = useI18n();
   const reduceMotion = useReducedMotion();
   const [activeNav, setActiveNav] = useState<AppNavId>("discover");
-  const [userProfile, setUserProfile] =
-    useState<CurrentUserProfile>(() => {
-      if (typeof window === "undefined") {
-        return currentUserProfile;
-      }
+  const storedProfile = useSyncExternalStore(
+    subscribeToProfileStorage,
+    getProfileStorageSnapshot,
+    getProfileServerSnapshot,
+  );
 
-      try {
-        const stored = window.localStorage.getItem(
-          "yuno_current_user_profile",
-        );
+  const userProfile = useMemo<CurrentUserProfile>(() => {
+    if (!storedProfile) return currentUserProfile;
 
-        if (!stored) return currentUserProfile;
+    try {
+      return {
+        ...currentUserProfile,
+        ...JSON.parse(storedProfile),
+      } as CurrentUserProfile;
+    } catch {
+      return currentUserProfile;
+    }
+  }, [storedProfile]);
 
-        const parsed = JSON.parse(stored) as CurrentUserProfile;
+  function setUserProfile(nextProfile: CurrentUserProfile) {
+    try {
+      window.localStorage.setItem(
+        PROFILE_STORAGE_KEY,
+        JSON.stringify(nextProfile),
+      );
+      window.dispatchEvent(new Event(PROFILE_STORAGE_EVENT));
+    } catch {
+      // Backend persistence will replace this temporary storage later.
+    }
+  }
 
-        return {
-          ...currentUserProfile,
-          ...parsed,
-          teaches: Array.isArray(parsed.teaches)
-            ? parsed.teaches
-            : currentUserProfile.teaches,
-          learns: Array.isArray(parsed.learns)
-            ? parsed.learns
-            : currentUserProfile.learns,
-          modes: Array.isArray(parsed.modes)
-            ? parsed.modes
-            : currentUserProfile.modes,
-          languages: Array.isArray(parsed.languages)
-            ? parsed.languages
-            : currentUserProfile.languages,
-          availability: Array.isArray(parsed.availability)
-            ? parsed.availability
-            : currentUserProfile.availability,
-        };
-      } catch {
-        window.localStorage.removeItem(
-          "yuno_current_user_profile",
-        );
+  const tutorialSeen = useSyncExternalStore(
+    subscribeToTutorialStorage,
+    getTutorialStorageSnapshot,
+    getTutorialServerSnapshot,
+  );
 
-        return currentUserProfile;
-      }
-    });
+  const tutorialOpen = tutorialSeen !== "true";
+
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("forYou");
   const [appliedFilters, setAppliedFilters] =
@@ -216,24 +255,6 @@ export function DiscoverApp() {
   const [matchOpen, setMatchOpen] = useState(false);
   const [notice, setNotice] = useState<Notice | null>(null);
   const [exitDirection, setExitDirection] = useState<-1 | 1>(-1);
-  const [tutorialOpen, setTutorialOpen] = useState(() => {
-    if (typeof window === "undefined") return false;
-
-    return !window.localStorage.getItem(
-      "yuno_discover_tutorial_seen",
-    );
-  });
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(
-        "yuno_current_user_profile",
-        JSON.stringify(userProfile),
-      );
-    } catch {
-      // Backend persistence will replace this temporary storage later.
-    }
-  }, [userProfile]);
 
   const filteredProfiles = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
@@ -330,11 +351,15 @@ export function DiscoverApp() {
     profiles.find((profile) => profile.id === messageProfileId) ?? null;
 
   function completeTutorial() {
-    window.localStorage.setItem(
-      "yuno_discover_tutorial_seen",
-      "true",
-    );
-    setTutorialOpen(false);
+    try {
+      window.localStorage.setItem(
+        TUTORIAL_STORAGE_KEY,
+        "true",
+      );
+      window.dispatchEvent(new Event(TUTORIAL_STORAGE_EVENT));
+    } catch {
+      // Backend persistence will replace this temporary storage later.
+    }
   }
 
   function moveNext(nextNotice?: Notice, direction: -1 | 1 = -1) {
@@ -378,7 +403,12 @@ export function DiscoverApp() {
       matchCount={matchedProfiles.length}
       userProfile={userProfile}
       context={
-        activeNav === "discover" ? <AppContextPanel /> : undefined
+        activeNav === "discover" ? (
+          <AppContextPanel
+            skillHours={userProfile.skillHours}
+            onNavigate={setActiveNav}
+          />
+        ) : undefined
       }
       overlays={
         <>
@@ -460,6 +490,11 @@ export function DiscoverApp() {
         <ProfileView
           profile={userProfile}
           onProfileChange={setUserProfile}
+        />
+      ) : activeNav === "skillHours" ? (
+        <SkillHoursView
+          profile={userProfile}
+          onTeach={() => setActiveNav("discover")}
         />
       ) : (
         <>
