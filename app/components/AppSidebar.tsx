@@ -6,6 +6,7 @@ import type { CurrentUserProfile } from "../data";
 import { appNavItems, type AppNavId } from "../lib/app-navigation";
 import { useI18n } from "../i18n/I18nProvider";
 import { Logo } from "./Logo";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 type AppSidebarProps = {
   activeNav: AppNavId;
@@ -28,6 +29,10 @@ export function AppSidebar({
     <aside className="app-sidebar">
       <div className="app-sidebar__brand">
         <Logo />
+
+        <div className="app-sidebar__language">
+          <LanguageSwitcher variant="compact" />
+        </div>
       </div>
 
       <nav className="app-sidebar__nav" aria-label={t("navigation.appLabel")}>

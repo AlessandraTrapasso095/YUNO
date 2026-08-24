@@ -4,6 +4,8 @@ import { I18nProvider } from "./i18n/I18nProvider";
 import { getRequestLocale } from "./i18n/server";
 import "./globals.css";
 import "./styles/skill-hours-view.css";
+import "./styles/sessions.css";
+import "./styles/booking.css";
 
 const geist = Geist({
   variable: "--font-yuno",

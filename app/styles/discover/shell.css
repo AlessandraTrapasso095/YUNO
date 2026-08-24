@@ -59,3 +59,79 @@
 .desktop-alerts { display: flex; align-items: center; gap: 8px; }
 .desktop-alerts > button { position: relative; display: grid; width: 42px; height: 42px; border: 1px solid var(--color-border); border-radius: 13px; background: var(--color-surface); place-items: center; cursor: pointer; }
 .desktop-alerts > button span { position: absolute; top: 9px; right: 9px; width: 6px; height: 6px; border: 1px solid var(--white); border-radius: 50%; background: var(--pink); }
+
+/* Full-width application sections */
+@media (min-width: 761px) {
+  .discover-app--full-main {
+    grid-template-columns: 232px minmax(0, 1fr);
+  }
+
+  .discover-app--full-main .discovery-main {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+/* Global desktop language switcher */
+.app-sidebar__brand {
+  display: flex;
+  padding: 1px 10px 18px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.app-sidebar__language {
+  position: relative;
+  z-index: 40;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  overflow: visible;
+}
+
+.app-sidebar__language .language-switcher {
+  width: 62px;
+  overflow: visible;
+}
+
+.app-sidebar__language .language-switcher__trigger {
+  width: 62px;
+  min-width: 62px;
+  height: 30px;
+  padding: 0 7px;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 9px;
+  background: #ffffff;
+  font-size: 10px;
+}
+
+.app-sidebar__language .language-switcher__flag {
+  font-size: 14px;
+}
+
+.app-sidebar__language .language-switcher__short {
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.app-sidebar__language .language-switcher__chevron {
+  width: 11px;
+  margin-left: 0;
+}
+
+.app-sidebar__language .language-switcher__dropdown {
+  left: 50%;
+  right: auto;
+  width: 150px;
+  min-width: 150px;
+  z-index: 100;
+  transform: translateX(-50%);
+}
+
+.app-sidebar {
+  overflow: visible;
+}

@@ -32,6 +32,10 @@ export function AppShell({
     <main
       className={`discover-app ${
         activeNav === "skillHours" ? "discover-app--skill-hours" : ""
+      } ${
+        ["matches", "messages", "sessions"].includes(activeNav)
+          ? "discover-app--full-main"
+          : ""
       }`}
     >
       <AppSidebar

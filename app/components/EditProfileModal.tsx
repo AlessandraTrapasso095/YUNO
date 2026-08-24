@@ -4,7 +4,8 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { Camera, X } from "lucide-react";
 import type {
-  AvailabilityId,
+  AvailabilityTimeRange,
+  WeekdayId,
   CurrentUserProfile,
   LanguageId,
   LearningMode,
@@ -41,10 +42,14 @@ const modeOptions: LearningMode[] = [
   "inPerson",
 ];
 
-const availabilityOptions: AvailabilityId[] = [
-  "weekdays",
-  "evenings",
-  "weekends",
+const weekdayOptions: WeekdayId[] = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
 ];
 
 function toggleItem<T extends string>(
@@ -75,6 +80,14 @@ export function EditProfileModal({
     modes: [...profile.modes],
     languages: [...profile.languages],
     availability: [...profile.availability],
+    weeklyAvailability: Object.fromEntries(
+      Object.entries(profile.weeklyAvailability).map(
+        ([day, ranges]) => [
+          day,
+          ranges.map((range) => ({ ...range })),
+        ],
+      ),
+    ) as CurrentUserProfile["weeklyAvailability"],
   });
 
   function getSkillLabel(skill: CurrentUserProfile["teaches"][number]) {
@@ -172,6 +185,54 @@ export function EditProfileModal({
     };
 
     reader.readAsDataURL(file);
+  }
+
+  function addAvailabilityRange(day: WeekdayId) {
+    setDraft((current) => ({
+      ...current,
+      weeklyAvailability: {
+        ...current.weeklyAvailability,
+        [day]: [
+          ...current.weeklyAvailability[day],
+          { start: "09:00", end: "10:00" },
+        ],
+      },
+    }));
+  }
+
+  function updateAvailabilityRange(
+    day: WeekdayId,
+    index: number,
+    field: keyof AvailabilityTimeRange,
+    value: string,
+  ) {
+    setDraft((current) => ({
+      ...current,
+      weeklyAvailability: {
+        ...current.weeklyAvailability,
+        [day]: current.weeklyAvailability[day].map(
+          (range, rangeIndex) =>
+            rangeIndex === index
+              ? { ...range, [field]: value }
+              : range,
+        ),
+      },
+    }));
+  }
+
+  function removeAvailabilityRange(
+    day: WeekdayId,
+    index: number,
+  ) {
+    setDraft((current) => ({
+      ...current,
+      weeklyAvailability: {
+        ...current.weeklyAvailability,
+        [day]: current.weeklyAvailability[day].filter(
+          (_, rangeIndex) => rangeIndex !== index,
+        ),
+      },
+    }));
   }
 
   function saveProfile() {
@@ -573,35 +634,99 @@ export function EditProfileModal({
         </section>
 
         <section className="profile-edit-section">
-          <h3>{t("profile.preferences.availability")}</h3>
+          <div className="profile-edit-availability__heading">
+            <div>
+              <h3>{t("profile.preferences.availability")}</h3>
+              <p>{t("profile.availabilityEditor.copy")}</p>
+            </div>
+          </div>
 
-          <div className="profile-edit-options">
-            {availabilityOptions.map((availability) => (
-              <button
-                key={availability}
-                type="button"
-                className={
-                  draft.availability.includes(availability)
-                    ? "is-active"
-                    : ""
-                }
-                aria-pressed={
-                  draft.availability.includes(availability)
-                }
-                onClick={() =>
-                  setDraft((current) => ({
-                    ...current,
-                    availability: toggleItem(
-                      current.availability,
-                      availability,
-                    ),
-                  }))
-                }
+          <div className="profile-edit-availability">
+            {weekdayOptions.map((day) => (
+              <div
+                className="profile-edit-availability__day"
+                key={day}
               >
-                {t(
-                  `discover.advancedFilters.${availability}`,
+                <div className="profile-edit-availability__day-head">
+                  <strong>
+                    {t(`profile.availabilityEditor.days.${day}`)}
+                  </strong>
+
+                  <button
+                    type="button"
+                    onClick={() => addAvailabilityRange(day)}
+                  >
+                    {t("profile.availabilityEditor.add")}
+                  </button>
+                </div>
+
+                {draft.weeklyAvailability[day].length ? (
+                  <div className="profile-edit-availability__ranges">
+                    {draft.weeklyAvailability[day].map(
+                      (range, index) => (
+                        <div
+                          className="profile-edit-availability__range"
+                          key={`${day}-${index}`}
+                        >
+                          <input
+                            type="time"
+                            value={range.start}
+                            onChange={(event) =>
+                              updateAvailabilityRange(
+                                day,
+                                index,
+                                "start",
+                                event.target.value,
+                              )
+                            }
+                            aria-label={t(
+                              "profile.availabilityEditor.start",
+                            )}
+                          />
+
+                          <span>—</span>
+
+                          <input
+                            type="time"
+                            value={range.end}
+                            onChange={(event) =>
+                              updateAvailabilityRange(
+                                day,
+                                index,
+                                "end",
+                                event.target.value,
+                              )
+                            }
+                            aria-label={t(
+                              "profile.availabilityEditor.end",
+                            )}
+                          />
+
+                          <button
+                            type="button"
+                            className="profile-edit-availability__remove"
+                            onClick={() =>
+                              removeAvailabilityRange(
+                                day,
+                                index,
+                              )
+                            }
+                            aria-label={t(
+                              "profile.availabilityEditor.remove",
+                            )}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                ) : (
+                  <span className="profile-edit-availability__empty">
+                    {t("profile.availabilityEditor.unavailable")}
+                  </span>
                 )}
-              </button>
+              </div>
             ))}
           </div>
         </section>

@@ -10,6 +10,7 @@ export type YunoProfile = {
   modes: LearningMode[];
   languages: LanguageId[];
   availability: AvailabilityId[];
+  weeklyAvailability: WeeklyAvailability;
   distanceKm: number;
 };
 
@@ -26,6 +27,25 @@ export type AvailabilityId =
   | "weekdays"
   | "evenings"
   | "weekends";
+
+export type WeekdayId =
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday";
+
+export type AvailabilityTimeRange = {
+  start: string;
+  end: string;
+};
+
+export type WeeklyAvailability = Record<
+  WeekdayId,
+  AvailabilityTimeRange[]
+>;
 
 export type SkillId =
   | "coding"
@@ -110,6 +130,20 @@ export const profiles: YunoProfile[] = [
     modes: ["inPerson"],
     languages: ["italian"],
     availability: ["weekends"],
+    weeklyAvailability: {
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [
+        { start: "09:00", end: "13:00" },
+        { start: "15:00", end: "18:00" },
+      ],
+      sunday: [
+        { start: "10:00", end: "13:00" },
+      ],
+    },
     distanceKm: 4,
   },
   {
@@ -124,6 +158,15 @@ export const profiles: YunoProfile[] = [
     modes: ["online"],
     languages: ["portuguese", "english"],
     availability: ["weekdays"],
+    weeklyAvailability: {
+      monday: [{ start: "09:00", end: "13:00" }],
+      tuesday: [{ start: "14:00", end: "18:00" }],
+      wednesday: [{ start: "09:00", end: "13:00" }],
+      thursday: [{ start: "14:00", end: "18:00" }],
+      friday: [{ start: "09:00", end: "13:00" }],
+      saturday: [],
+      sunday: [],
+    },
     distanceKm: 18,
   },
   {
@@ -138,6 +181,15 @@ export const profiles: YunoProfile[] = [
     modes: ["inPerson"],
     languages: ["spanish", "english"],
     availability: ["evenings"],
+    weeklyAvailability: {
+      monday: [{ start: "17:00", end: "21:00" }],
+      tuesday: [{ start: "17:00", end: "21:00" }],
+      wednesday: [{ start: "17:00", end: "21:00" }],
+      thursday: [{ start: "17:00", end: "21:00" }],
+      friday: [{ start: "17:00", end: "20:00" }],
+      saturday: [],
+      sunday: [],
+    },
     distanceKm: 7,
   },
   {
@@ -152,6 +204,18 @@ export const profiles: YunoProfile[] = [
     modes: ["online"],
     languages: ["german"],
     availability: ["weekends"],
+    weeklyAvailability: {
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [
+        { start: "10:00", end: "13:00" },
+        { start: "16:00", end: "19:00" },
+      ],
+      sunday: [{ start: "10:00", end: "14:00" }],
+    },
     distanceKm: 26,
   },
 ];
@@ -182,6 +246,7 @@ export type CurrentUserProfile = {
   modes: LearningMode[];
   languages: LanguageId[];
   availability: AvailabilityId[];
+  weeklyAvailability: WeeklyAvailability;
   rating: number;
   completedSessions: number;
   skillHours: number;
@@ -200,6 +265,18 @@ export const currentUserProfile: CurrentUserProfile = {
   modes: ["online", "inPerson"],
   languages: ["italian", "english"],
   availability: ["evenings", "weekends"],
+  weeklyAvailability: {
+    monday: [{ start: "18:00", end: "21:00" }],
+    tuesday: [{ start: "18:00", end: "21:00" }],
+    wednesday: [{ start: "18:00", end: "21:00" }],
+    thursday: [{ start: "18:00", end: "21:00" }],
+    friday: [{ start: "18:00", end: "21:00" }],
+    saturday: [
+      { start: "09:00", end: "13:00" },
+      { start: "15:00", end: "18:00" },
+    ],
+    sunday: [{ start: "10:00", end: "13:00" }],
+  },
   rating: 4.9,
   completedSessions: 18,
   skillHours: 4.5,

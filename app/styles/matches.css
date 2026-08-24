@@ -533,3 +533,82 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (min-width: 761px) {
+  .discover-app--full-main .matches-view {
+    width: min(100%, 1040px);
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+/* Desktop — compact 3-column matches */
+@media (min-width: 901px) {
+  .discover-app--full-main .matches-grid,
+  .discover-app--full-main .matches-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .discover-app--full-main .match-card {
+    min-width: 0;
+  }
+
+  .discover-app--full-main .match-card__image,
+  .discover-app--full-main .match-card > img {
+    max-height: 205px;
+    object-fit: cover;
+  }
+}
+
+/* Match cards — align portrait crop with Discover */
+@media (min-width: 901px) {
+  .discover-app--full-main .match-card__image img {
+    object-fit: cover;
+    object-position: center 28%;
+  }
+}
+
+.match-card__book {
+  display: inline-flex;
+  min-height: 40px;
+  padding: 0 11px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid rgba(121, 87, 255, 0.15);
+  border-radius: 11px;
+  color: var(--violet);
+  background: var(--soft-violet);
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Match card actions — readable compact layout */
+@media (min-width: 901px) {
+  .discover-app--full-main .match-card__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .discover-app--full-main .match-card__message {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 40px;
+    padding: 0 10px;
+    white-space: nowrap;
+    font-size: 10px;
+  }
+
+  .discover-app--full-main .match-card__book,
+  .discover-app--full-main .match-card__remove {
+    width: 100%;
+    min-width: 0;
+    min-height: 38px;
+    padding: 0 8px;
+    white-space: nowrap;
+    font-size: 9px;
+  }
+}

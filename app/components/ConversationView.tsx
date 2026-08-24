@@ -3,6 +3,7 @@
 import Image from "next/image";
 import {
   ArrowLeft,
+  CalendarPlus,
   Check,
   CheckCheck,
   Send,
@@ -25,6 +26,7 @@ type ConversationViewProps = {
   onReceive: (text: string) => void;
   onMarkRead: () => void;
   onMarkMessageRead: (messageId: string) => void;
+  onBookSession: (profile: YunoProfile) => void;
 };
 
 export function ConversationView({
@@ -35,6 +37,7 @@ export function ConversationView({
   onReceive,
   onMarkRead,
   onMarkMessageRead,
+  onBookSession,
 }: ConversationViewProps) {
   const { t } = useI18n();
   const [message, setMessage] = useState("");
@@ -122,6 +125,15 @@ export function ConversationView({
           <strong>{profile.name}</strong>
           <span>{t("messages.online")}</span>
         </div>
+
+        <button
+          className="conversation-header__book"
+          type="button"
+          onClick={() => onBookSession(profile)}
+        >
+          <CalendarPlus size={16} />
+          <span>{t("booking.chatAction")}</span>
+        </button>
       </header>
 
       <div className="conversation-body">

@@ -1,7 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { Heart, MessageCircle, Search, Sparkles, X } from "lucide-react";
+import {
+  CalendarPlus,
+  Heart,
+  MessageCircle,
+  Search,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 import type { YunoProfile } from "../data";
 import { useI18n } from "../i18n/I18nProvider";
@@ -11,6 +18,7 @@ type MatchesViewProps = {
   matches: YunoProfile[];
   onDiscover: () => void;
   onMessage: (profile: YunoProfile) => void;
+  onBookSession: (profile: YunoProfile) => void;
   onRemove: (profileId: number) => void;
 };
 
@@ -18,6 +26,7 @@ export function MatchesView({
   matches,
   onDiscover,
   onMessage,
+  onBookSession,
   onRemove,
 }: MatchesViewProps) {
   const { t } = useI18n();
@@ -115,6 +124,15 @@ export function MatchesView({
                   >
                     <MessageCircle size={17} />
                     {t("matches.message")}
+                  </button>
+
+                  <button
+                    className="match-card__book"
+                    type="button"
+                    onClick={() => onBookSession(profile)}
+                  >
+                    <CalendarPlus size={16} />
+                    {t("booking.cardAction")}
                   </button>
 
                   <button

@@ -187,7 +187,7 @@
 }
 
 .messages-view {
-  width: min(100%, 980px);
+  width: min(100%, 1040px);
   margin: 0 auto;
   padding: 10px 0 40px;
 }
@@ -716,4 +716,56 @@
 
 .conversation-typing {
   margin-top: 2px;
+}
+
+@media (min-width: 761px) {
+  .discover-app--full-main .conversation-view {
+    width: min(100%, 1040px);
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+/* Messages inbox — readable names and previews */
+.message-preview__top strong {
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.message-preview__bottom > span {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.message-preview__top time {
+  font-size: 10px;
+}
+
+.conversation-header__book {
+  display: inline-flex;
+  min-height: 34px;
+  margin-left: auto;
+  padding: 0 11px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(121, 87, 255, 0.14);
+  border-radius: 10px;
+  color: var(--violet);
+  background: var(--soft-violet);
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .conversation-header__book {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .conversation-header__book > span {
+    display: none;
+  }
 }

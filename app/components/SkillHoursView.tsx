@@ -20,11 +20,13 @@ import {
   X,
 } from "lucide-react";
 import type { CurrentUserProfile } from "../data";
+import type { YunoSession } from "../lib/sessions-store";
 import { useI18n } from "../i18n/I18nProvider";
 import { Modal, SkillHourBadge } from "./ui";
 
 type SkillHoursViewProps = {
   profile: CurrentUserProfile;
+  sessions: YunoSession[];
   onTeach: () => void;
 };
 
@@ -113,6 +115,7 @@ const packages = [
 
 export function SkillHoursView({
   profile,
+  sessions,
   onTeach,
 }: SkillHoursViewProps) {
   const { t } = useI18n();
@@ -125,6 +128,37 @@ export function SkillHoursView({
 
   const activePackage =
     packages.find((item) => item.id === selectedPackage) ?? null;
+
+  const heldSkillHours = sessions
+    .filter(
+      (session) =>
+        session.role === "learner" &&
+        (session.status === "pending" ||
+          session.status === "upcoming"),
+    )
+    .reduce(
+      (total, session) => total + session.skillHours,
+      0,
+    );
+
+  const forfeitedSkillHours = sessions
+    .filter(
+      (session) =>
+        session.role === "learner" &&
+        session.status === "cancelled" &&
+        session.cancellationOutcome === "forfeited",
+    )
+    .reduce(
+      (total, session) => total + session.skillHours,
+      0,
+    );
+
+  const availableSkillHours = Math.max(
+    0,
+    profile.skillHours -
+      heldSkillHours -
+      forfeitedSkillHours,
+  );
 
   const filteredTransactions =
     activityFilter === "all"
@@ -168,7 +202,7 @@ export function SkillHoursView({
             <p>{t("skillHoursView.copy")}</p>
           </div>
 
-          <SkillHourBadge balance={profile.skillHours.toFixed(1)} />
+          <SkillHourBadge balance={availableSkillHours.toFixed(1)} />
         </header>
 
         <div className="skill-hours-desktop-grid">
@@ -183,7 +217,7 @@ export function SkillHoursView({
                   <span>{t("skillHoursView.balance.available")}</span>
 
                   <strong>
-                    {profile.skillHours.toFixed(1)}
+                    {availableSkillHours.toFixed(1)}
                     <small> SH</small>
                   </strong>
 
@@ -200,7 +234,7 @@ export function SkillHoursView({
                   <span>{t("skillHoursView.balance.held")}</span>
 
                   <strong>
-                    1.0
+                    {heldSkillHours.toFixed(1)}
                     <small> SH</small>
                   </strong>
 

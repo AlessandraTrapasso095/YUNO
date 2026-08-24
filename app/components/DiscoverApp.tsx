@@ -38,6 +38,9 @@ import { ConversationView } from "./ConversationView";
 import { MessagesView } from "./MessagesView";
 import { ProfileView } from "./ProfileView";
 import { SkillHoursView } from "./SkillHoursView";
+import { SessionsView } from "./SessionsView";
+import { BookingModal } from "./BookingModal";
+import { useSessionsStore } from "../lib/sessions-store";
 import { DiscoverTutorial } from "./DiscoverTutorial";
 import {
   DiscoverFiltersModal,
@@ -205,7 +208,12 @@ export function DiscoverApp() {
   const { t } = useI18n();
   const reduceMotion = useReducedMotion();
   const messageStore = useMessagesStore();
+  const sessionsStore = useSessionsStore();
   const [activeNav, setActiveNav] = useState<AppNavId>("discover");
+  const [bookingProfileId, setBookingProfileId] =
+    useState<number | null>(null);
+  const [rescheduleSessionId, setRescheduleSessionId] =
+    useState<string | null>(null);
   const storedProfile = useSyncExternalStore(
     subscribeToProfileStorage,
     getProfileStorageSnapshot,
@@ -354,27 +362,53 @@ export function DiscoverApp() {
   const messageProfile =
     profiles.find((profile) => profile.id === messageProfileId) ?? null;
 
-  function simulateIncomingMessage(profileId: number) {
-    const profile = profiles.find((item) => item.id === profileId);
+  const bookingProfile =
+    profiles.find((profile) => profile.id === bookingProfileId) ?? null;
 
-    if (!profile) return;
+  const rescheduleSession =
+    sessionsStore.sessions.find(
+      (session) => session.id === rescheduleSessionId,
+    ) ?? null;
 
-    const isOpenConversation =
-      activeNav === "messages" &&
-      messageProfileId === profileId;
+  const rescheduleProfile =
+    rescheduleSession
+      ? profiles.find(
+          (profile) =>
+            profile.id === rescheduleSession.profileId,
+        ) ?? null
+      : null;
 
-    messageStore.receiveMessage(
-      profileId,
-      t("messages.demoOutsideReply", {
-        name: profile.name,
-      }),
-      !isOpenConversation,
+  const heldSkillHours = sessionsStore.sessions
+    .filter(
+      (session) =>
+        session.role === "learner" &&
+        (session.status === "pending" ||
+          session.status === "upcoming"),
+    )
+    .reduce(
+      (total, session) => total + session.skillHours,
+      0,
     );
 
-    if (!isOpenConversation) {
-      void playYunoSound("messageReceived");
-    }
-  }
+  const forfeitedSkillHours = sessionsStore.sessions
+    .filter(
+      (session) =>
+        session.role === "learner" &&
+        session.status === "cancelled" &&
+        session.cancellationOutcome === "forfeited",
+    )
+    .reduce(
+      (total, session) => total + session.skillHours,
+      0,
+    );
+
+  const availableSkillHours = Math.max(
+    0,
+    userProfile.skillHours -
+      heldSkillHours -
+      forfeitedSkillHours,
+  );
+
 
   function completeTutorial() {
     try {
@@ -425,7 +459,8 @@ export function DiscoverApp() {
   }
 
   return (
-    <AppShell
+    <>
+      <AppShell
       activeNav={activeNav}
       onNavigate={setActiveNav}
       matchCount={matchedProfiles.length}
@@ -506,6 +541,9 @@ export function DiscoverApp() {
             setMessageProfileId(profile.id);
             setActiveNav("messages");
           }}
+          onBookSession={(profile) => {
+            setBookingProfileId(profile.id);
+          }}
           onRemove={(profileId) => {
             setMatchedIds((ids) =>
               ids.filter((id) => id !== profileId),
@@ -540,6 +578,9 @@ export function DiscoverApp() {
           onMarkMessageRead={
             messageStore.markMessageRead
           }
+          onBookSession={(profile) => {
+            setBookingProfileId(profile.id);
+          }}
         />
       ) : activeNav === "messages" ? (
         <MessagesView
@@ -560,7 +601,36 @@ export function DiscoverApp() {
       ) : activeNav === "skillHours" ? (
         <SkillHoursView
           profile={userProfile}
+          sessions={sessionsStore.sessions}
           onTeach={() => setActiveNav("discover")}
+        />
+      ) : activeNav === "sessions" ? (
+        <SessionsView
+          sessions={sessionsStore.sessions}
+          onAcceptRequest={(sessionId) =>
+            sessionsStore.updateSessionStatus(
+              sessionId,
+              "upcoming",
+            )
+          }
+          onDeclineRequest={(sessionId) =>
+            sessionsStore.updateSessionStatus(
+              sessionId,
+              "cancelled",
+            )
+          }
+          onWithdrawRequest={(sessionId) =>
+            sessionsStore.updateSessionStatus(
+              sessionId,
+              "cancelled",
+            )
+          }
+          onCancelSession={(sessionId) =>
+            sessionsStore.cancelSession(sessionId)
+          }
+          onRescheduleSession={(sessionId) =>
+            setRescheduleSessionId(sessionId)
+          }
         />
       ) : (
         <>
@@ -751,5 +821,39 @@ export function DiscoverApp() {
         </>
       )}
     </AppShell>
+
+    {bookingProfile && (
+      <BookingModal
+        profile={bookingProfile}
+        sessions={sessionsStore.sessions}
+        availableSkillHours={availableSkillHours}
+        onClose={() => setBookingProfileId(null)}
+        onConfirm={(session) => {
+          sessionsStore.addSession(session);
+          setBookingProfileId(null);
+          setActiveNav("sessions");
+        }}
+      />
+    )}
+
+    {rescheduleSession && rescheduleProfile && (
+      <BookingModal
+        profile={rescheduleProfile}
+        sessions={sessionsStore.sessions}
+        availableSkillHours={availableSkillHours}
+        variant="reschedule"
+        initialSession={rescheduleSession}
+        onClose={() => setRescheduleSessionId(null)}
+        onConfirm={(updated) => {
+          sessionsStore.rescheduleSession(
+            rescheduleSession.id,
+            updated.date,
+            updated.time,
+          );
+          setRescheduleSessionId(null);
+        }}
+      />
+    )}
+  </>
   );
 }
