@@ -69,6 +69,7 @@ export function EditProfileModal({
   const { t } = useI18n();
   const [customTeach, setCustomTeach] = useState("");
   const [customLearn, setCustomLearn] = useState("");
+  const [customLanguage, setCustomLanguage] = useState("");
   const [photoError, setPhotoError] = useState("");
   const [cropSource, setCropSource] = useState<string | null>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
@@ -79,6 +80,7 @@ export function EditProfileModal({
     learns: [...profile.learns],
     modes: [...profile.modes],
     languages: [...profile.languages],
+    customLanguages: [...profile.customLanguages],
     availability: [...profile.availability],
     weeklyAvailability: Object.fromEntries(
       Object.entries(profile.weeklyAvailability).map(
@@ -144,6 +146,53 @@ export function EditProfileModal({
     } else {
       setCustomLearn("");
     }
+  }
+
+  function addCustomLanguage() {
+    const value = customLanguage.trim();
+
+    if (!value) return;
+
+    const normalized = value.toLocaleLowerCase();
+
+    const matchesStandardLanguage = languageOptions.some(
+      (language) =>
+        t(
+          `discover.advancedFilters.languages.${language}`,
+        )
+          .trim()
+          .toLocaleLowerCase() === normalized,
+    );
+
+    const alreadyExists = draft.customLanguages.some(
+      (language) =>
+        language.trim().toLocaleLowerCase() === normalized,
+    );
+
+    if (matchesStandardLanguage || alreadyExists) {
+      setCustomLanguage("");
+      return;
+    }
+
+    setDraft((current) => ({
+      ...current,
+      customLanguages: [
+        ...current.customLanguages,
+        value,
+      ],
+    }));
+
+    setCustomLanguage("");
+  }
+
+  function removeCustomLanguage(language: string) {
+    setDraft((current) => ({
+      ...current,
+      customLanguages:
+        current.customLanguages.filter(
+          (item) => item !== language,
+        ),
+    }));
   }
 
   function handlePhotoChange(
@@ -596,6 +645,58 @@ export function EditProfileModal({
                 )}
               </button>
             ))}
+          </div>
+
+          {draft.customLanguages.length > 0 && (
+            <div className="profile-edit-custom-languages">
+              {draft.customLanguages.map((language) => (
+                <button
+                  key={language}
+                  type="button"
+                  className="profile-edit-custom-language"
+                  onClick={() =>
+                    removeCustomLanguage(language)
+                  }
+                  aria-label={t(
+                    "profile.editModal.removeLanguage",
+                    { language },
+                  )}
+                >
+                  <span>{language}</span>
+                  <X size={13} />
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="profile-edit-language-form">
+            <Input
+              value={customLanguage}
+              onChange={(event) =>
+                setCustomLanguage(event.target.value)
+              }
+              onKeyDown={(event) => {
+                if (event.key !== "Enter") return;
+
+                event.preventDefault();
+                addCustomLanguage();
+              }}
+              placeholder={t(
+                "profile.editModal.addLanguagePlaceholder",
+              )}
+              aria-label={t(
+                "profile.editModal.addLanguagePlaceholder",
+              )}
+            />
+
+            <button
+              type="button"
+              onClick={addCustomLanguage}
+              disabled={!customLanguage.trim()}
+            >
+              <span aria-hidden="true">+</span>
+              {t("profile.editModal.addLanguage")}
+            </button>
           </div>
         </section>
 

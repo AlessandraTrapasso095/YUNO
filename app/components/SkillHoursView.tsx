@@ -40,57 +40,73 @@ type ActivityFilter =
   | "held"
   | "returned";
 
-const transactions = [
-  {
-    id: "welcome",
-    type: "welcome",
-    filter: "earned",
-    amount: 1,
-    dateKey: "skillHoursView.activity.today",
-  },
-  {
-    id: "teaching",
-    type: "earned",
-    filter: "earned",
-    amount: 1,
-    dateKey: "skillHoursView.activity.yesterday",
-  },
-  {
-    id: "learning",
-    type: "spent",
-    filter: "spent",
-    amount: -1,
-    dateKey: "skillHoursView.activity.aug18",
-  },
-  {
-    id: "purchase",
-    type: "purchased",
-    filter: "purchased",
-    amount: 3,
-    dateKey: "skillHoursView.activity.aug12",
-  },
-  {
-    id: "booking-held",
-    type: "held",
-    filter: "held",
-    amount: -1,
-    dateKey: "skillHoursView.activity.aug10",
-  },
-  {
-    id: "returned",
-    type: "returned",
-    filter: "returned",
-    amount: 1,
-    dateKey: "skillHoursView.activity.aug08",
-  },
-  {
-    id: "plus",
-    type: "subscription",
-    filter: "earned",
-    amount: 2,
-    dateKey: "skillHoursView.activity.aug01",
-  },
-] as const;
+type SkillHourTransaction = {
+  id: string;
+  type:
+    | "welcome"
+    | "earned"
+    | "spent"
+    | "purchased"
+    | "held"
+    | "returned"
+    | "subscription";
+  filter: Exclude<ActivityFilter, "all">;
+  amount: number;
+  dateKey: string;
+};
+
+function getTransactions(
+  profile: CurrentUserProfile,
+  sessions: YunoSession[],
+): SkillHourTransaction[] {
+  const items: SkillHourTransaction[] = [];
+
+  if (profile.skillHours >= 1) {
+    items.push({
+      id: "welcome",
+      type: "welcome",
+      filter: "earned",
+      amount: 1,
+      dateKey: "skillHoursView.activity.today",
+    });
+  }
+
+  sessions
+    .filter(
+      (session) =>
+        session.role === "learner" &&
+        (session.status === "pending" ||
+          session.status === "upcoming"),
+    )
+    .forEach((session) => {
+      items.push({
+        id: `held-${session.id}`,
+        type: "held",
+        filter: "held",
+        amount: -session.skillHours,
+        dateKey: "skillHoursView.activity.today",
+      });
+    });
+
+  sessions
+    .filter(
+      (session) =>
+        session.role === "learner" &&
+        session.status === "cancelled" &&
+        session.cancellationOutcome === "returned",
+    )
+    .forEach((session) => {
+      items.push({
+        id: `returned-${session.id}`,
+        type: "returned",
+        filter: "returned",
+        amount: session.skillHours,
+        dateKey: "skillHoursView.activity.today",
+      });
+    });
+
+  return items;
+}
 
 const packages = [
   {
@@ -128,6 +144,11 @@ export function SkillHoursView({
 
   const activePackage =
     packages.find((item) => item.id === selectedPackage) ?? null;
+
+  const transactions = getTransactions(
+    profile,
+    sessions,
+  );
 
   const heldSkillHours = sessions
     .filter(

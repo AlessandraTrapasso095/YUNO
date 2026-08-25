@@ -6,6 +6,7 @@ import "./globals.css";
 import "./styles/skill-hours-view.css";
 import "./styles/sessions.css";
 import "./styles/booking.css";
+import "./styles/onboarding.css";
 
 const geist = Geist({
   variable: "--font-yuno",

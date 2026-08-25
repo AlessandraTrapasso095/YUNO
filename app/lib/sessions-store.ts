@@ -143,19 +143,8 @@ function parseStore(snapshot: string): SessionsStore {
         }))
       : [];
 
-    const storedIds = new Set(
-      storedSessions.map((session) => session.id),
-    );
-
-    const missingDemoSessions = demoSessions.filter(
-      (session) => !storedIds.has(session.id),
-    );
-
     return {
-      sessions: [
-        ...storedSessions,
-        ...missingDemoSessions,
-      ] as YunoSession[],
+      sessions: storedSessions as YunoSession[],
     };
   } catch {
     return {
@@ -185,6 +174,12 @@ function saveStore(store: SessionsStore) {
   window.dispatchEvent(
     new Event(STORAGE_EVENT),
   );
+}
+
+export function resetSessionsStore() {
+  saveStore({
+    sessions: [],
+  });
 }
 
 function addSession(

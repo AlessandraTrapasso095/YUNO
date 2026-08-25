@@ -218,11 +218,12 @@ export function ProfileView({
                 <div>
                   <span>{t("profile.preferences.languages")}</span>
                   <strong>
-                    {profile.languages
-                      .map((language) =>
+                    {[
+                      ...profile.languages.map((language) =>
                         t(`discover.advancedFilters.languages.${language}`),
-                      )
-                      .join(", ")}
+                      ),
+                      ...profile.customLanguages,
+                    ].join(", ")}
                   </strong>
                 </div>
               </div>

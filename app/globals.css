@@ -23,3 +23,100 @@
 
 @import "./styles/responsive.css";
 @import "./styles/profile.css";
+
+.context-session-empty {
+  display: flex;
+  padding: 14px 0 16px;
+  align-items: center;
+  gap: 11px;
+}
+
+.context-session-empty > span {
+  display: grid;
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  border-radius: 12px;
+  color: #7957ff;
+  background: rgba(121, 87, 255, 0.08);
+  place-items: center;
+}
+
+.context-session-empty strong {
+  display: block;
+  font-size: 10px;
+}
+
+.context-session-empty p {
+  margin: 3px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.popular-now__empty {
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.profile-edit-custom-languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.profile-edit-custom-language {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid rgba(121, 87, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(121, 87, 255, 0.07);
+  color: var(--color-text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.profile-edit-custom-language:hover {
+  border-color: rgba(121, 87, 255, 0.38);
+}
+
+.profile-edit-language-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.profile-edit-language-form > button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--color-text-primary);
+  color: white;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-edit-language-form > button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .profile-edit-language-form {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-edit-language-form > button {
+    width: 100%;
+  }
+}

@@ -245,6 +245,7 @@ export type CurrentUserProfile = {
   learns: ProfileSkillId[];
   modes: LearningMode[];
   languages: LanguageId[];
+  customLanguages: string[];
   availability: AvailabilityId[];
   weeklyAvailability: WeeklyAvailability;
   rating: number;
@@ -264,6 +265,7 @@ export const currentUserProfile: CurrentUserProfile = {
   learns: ["photography", "spanish", "piano"],
   modes: ["online", "inPerson"],
   languages: ["italian", "english"],
+  customLanguages: [],
   availability: ["evenings", "weekends"],
   weeklyAvailability: {
     monday: [{ start: "18:00", end: "21:00" }],

@@ -24,6 +24,7 @@ import {
   currentUserProfile,
   profiles,
   type CurrentUserProfile,
+  type ProfileSkillId,
 } from "../data";
 import { type AppNavId } from "../lib/app-navigation";
 import { useI18n } from "../i18n/I18nProvider";
@@ -49,6 +50,11 @@ import {
 } from "./DiscoverFiltersModal";
 import { Button, Input, Modal, Toast, Tooltip } from "./ui";
 
+import {
+  PROFILE_STORAGE_EVENT,
+  PROFILE_STORAGE_KEY,
+  writeCurrentUserProfile,
+} from "../lib/profile-storage";
 const discoveryFilters = [
   { id: "forYou", labelKey: "discover.filters.forYou" },
   { id: "nearby", labelKey: "discover.filters.nearby" },
@@ -163,8 +169,6 @@ function MatchCelebration({
   );
 }
 
-const PROFILE_STORAGE_KEY = "yuno_current_user_profile";
-const PROFILE_STORAGE_EVENT = "yuno-profile-storage-change";
 const TUTORIAL_STORAGE_KEY = "yuno_discover_tutorial_seen";
 const TUTORIAL_STORAGE_EVENT = "yuno-tutorial-storage-change";
 
@@ -235,11 +239,7 @@ export function DiscoverApp() {
 
   function setUserProfile(nextProfile: CurrentUserProfile) {
     try {
-      window.localStorage.setItem(
-        PROFILE_STORAGE_KEY,
-        JSON.stringify(nextProfile),
-      );
-      window.dispatchEvent(new Event(PROFILE_STORAGE_EVENT));
+      writeCurrentUserProfile(nextProfile);
     } catch {
       // Backend persistence will replace this temporary storage later.
     }
@@ -409,6 +409,63 @@ export function DiscoverApp() {
       forfeitedSkillHours,
   );
 
+  const nextUpcomingSession =
+    [...sessionsStore.sessions]
+      .filter(
+        (session) =>
+          session.status === "upcoming",
+      )
+      .sort((a, b) => {
+        const first = `${a.date}T${a.time}`;
+        const second = `${b.date}T${b.time}`;
+
+        return first.localeCompare(second);
+      })[0] ?? null;
+
+  const nextSessionContext =
+    nextUpcomingSession
+      ? (() => {
+          const profile = profiles.find(
+            (item) =>
+              item.id ===
+              nextUpcomingSession.profileId,
+          );
+
+          if (!profile) return null;
+
+          return {
+            profile,
+            skill: nextUpcomingSession.skill,
+            date: nextUpcomingSession.date,
+            time: nextUpcomingSession.time,
+          };
+        })()
+      : null;
+
+
+  const nearbyPopularSkills = Object.entries(
+    profiles
+      .filter((profile) => profile.distanceKm <= 10)
+      .flatMap((profile) => [
+        ...profile.teaches,
+        ...profile.learns,
+      ])
+      .reduce<Record<string, number>>(
+        (counts, skill) => ({
+          ...counts,
+          [skill]: (counts[skill] ?? 0) + 1,
+        }),
+        {},
+      ),
+  )
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([skill, count]) => ({
+      skill: skill as ProfileSkillId,
+      count,
+    }));
+
+
 
   function completeTutorial() {
     try {
@@ -469,8 +526,29 @@ export function DiscoverApp() {
       context={
         activeNav === "discover" ? (
           <AppContextPanel
-            skillHours={userProfile.skillHours}
+            skillHours={availableSkillHours}
+            nextSession={nextSessionContext}
+            popularNearby={nearbyPopularSkills}
             onNavigate={setActiveNav}
+            onDiscover={() => {
+              setActiveNav("discover");
+
+              window.requestAnimationFrame(() => {
+                const search =
+                  document.querySelector<HTMLInputElement>(
+                    ".discover-search-row input",
+                  );
+
+                search?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
+
+                window.setTimeout(() => {
+                  search?.focus();
+                }, 350);
+              });
+            }}
           />
         ) : undefined
       }

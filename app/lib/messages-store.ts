@@ -78,6 +78,10 @@ function saveStore(store: MessageStore) {
   }
 }
 
+export function resetMessagesStore() {
+  saveStore(emptyStore);
+}
+
 function readStore() {
   try {
     return parseStore(
